@@ -23,5 +23,6 @@ exec(`npm start -- run my dev server`, { async: true })
 setTimeout(() => {
     opn('http://theUrlToMyWorkerSpace.com/xx', { app: 'chrome' });
 }, 15000) //延时15秒 等编译完成再打开浏览器 
+
 ```
 主要用到了 [*shelljs*](https://github.com/shelljs/shelljs) 和 [*opn*](https://github.com/sindresorhus/opn)
