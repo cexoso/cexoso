@@ -367,15 +367,8 @@ const mapStateToProps = createSelector(
 )
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        getCurrentProjIsErp: actionsCreator.getCurrentProjIsErp,
-        getCurrentUserRole: actionsCreator.getCurrentUserRole,
-        updateRoleInfo: actionsCreator.updateRoleInfo,
-        getTeamMenu: method.getTeamMenu,
-        getGroupMenu: method.getGroupMenu,
-        getVisitBarChart: method.getVisitBarChart,
-        getFollowStatistics: method.getFollowStatistics,
-        getDealStatistics: method.getDealStatistics,
-        getOverdueStatistics: method.getOverdueStatistics
+        ...method,
+        ...actionsCreator
     }, dispatch)
 }
 const enhance = compose(
@@ -391,7 +384,7 @@ const enhance = compose(
     lifecycle({
         componentDidMount() {
             const { props: {
-            getCurrentProjIsErp,
+                getCurrentProjIsErp,
                 getTeamMenu,
                 getCurrentUserRole,
                 getVisitBarChart,
