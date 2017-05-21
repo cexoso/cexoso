@@ -325,13 +325,12 @@ import VisitBarChart from "./visitBarChart"
 import CombineFollowStatistics from "./combineFollowStatistics"
 import DealStatistics from "./dealStatistics"
 import OverdueStatistics from "./overdueStatistics"
-import { isSales } from '../../../../../../public/js/roleMode';
-export default function ManagerApp({ isReferer }) {
+export default function ManagerApp() {
     return (
         <OuterWrap>
-            <Body isSales={isSales()}>
-                <ManageTopMenu hide={!!isReferer} />
-                <Menu hide={!!isReferer} />
+            <Body>
+                <ManageTopMenu />
+                <Menu />
                 <VisitBarChart />
                 <StaticsticsContainer>
                     <CombineFollowStatistics />
@@ -339,7 +338,7 @@ export default function ManagerApp({ isReferer }) {
                     <OverdueStatistics />
                 </StaticsticsContainer>
             </Body>
-            <ManageButtomMenu isSales={isSales()} />
+            <ManageButtomMenu />
         </OuterWrap>
     )
 }
