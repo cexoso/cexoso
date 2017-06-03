@@ -4,6 +4,8 @@ date: 2017-05-21 20:19:02
 tags:
 ---
 # Pointfree编程风格
+![timo](fp-lodash/timo.png)
+
 如下示例
 ```javascript
 import { someAction } from "./action"
