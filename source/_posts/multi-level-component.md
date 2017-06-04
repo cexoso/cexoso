@@ -287,3 +287,18 @@ const TextArea = compose(
 这样input最终接收到的东西只有onChange value type placeholder。connect注入里面的dispatch方法在filterProps的时候被过滤掉了。最终我们即保证了上层业务代码的简单(使用TextArea不需要维护任何props)，又保证了低层Input组件的纯粹（一个几乎什么都没做的代码）。recompose构建了像一个从通用到专用之前的通道。承载着细节的业务逻辑。
 
 假如我们以后需要修改业务代码，让TextArea只能输入数字，只需要修改对应的withOnChangeHandle就可以了，保证不会影响到其它使用了input的代码。
+
+### Optimizing bundle size
+支持tree shaking的如webpack2或者 Rollup都能对recompose进行打包优化。<br/>
+或者使用 [babel-lodash-plugin](https://github.com/lodash/babel-plugin-lodash),babel-lodash-plugin不只对lodash有效对recompose同样有效。
+
+This can be done by updating lodash config in .babelrc.
+```
+{
+-  "plugins": ["lodash"]
++  "plugins": [
++    ["lodash", { "id": ["lodash", "recompose"] }]
++  ]
+}
+ ```
+After that, you can do imports like below without actually including the entire library content.
