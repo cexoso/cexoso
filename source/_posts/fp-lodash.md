@@ -17,7 +17,6 @@ function mapActionToProps(dispatch) {
         goDetail: someAction
     },dispatch)
 }
-partial(bindActionCreators, )
 connect(mapStateToProps, mapActionToProps)
 ```
 可以用lodash像如下实现
@@ -52,6 +51,6 @@ const taxPercentSelector = property("shop.taxPercent")
 
 const subtotalSelector = createSelector(
   shopItemsSelector,
-  partialRight(reduce,`(acc, item) => acc + item.value,0)  
+  partialRight(reduce,(acc, item) => acc + item.value,0)  
 )
 ```
