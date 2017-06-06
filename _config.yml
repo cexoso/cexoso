@@ -64,7 +64,7 @@ pagination_dir: page
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
 
-theme: light
+theme: landscape
 #git clone git://github.com/tommy351/hexo-theme-light.git themes/light
 
 # Deployment
