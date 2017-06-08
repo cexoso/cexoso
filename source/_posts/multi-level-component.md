@@ -23,8 +23,9 @@ export default class List extends Component {
     }
 }
 ```
-尽乎完美，因为逻辑简单，需求明确。以至于不需要任何注释。
-## 接下来我们需要隐藏一些数据，list里面的数据带有disable的就不要展示了
+尽乎完美，因为逻辑简单，需求明确。以至于不需要任何注释。接下来...
+<!-- more -->
+## 我们需要隐藏一些数据，list里面的数据带有disable的就不要展示了
 ```javascript
 import React,{ Component } from "react"
 import { chain } from "lodash"

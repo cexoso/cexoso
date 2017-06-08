@@ -8,7 +8,7 @@ reward: true
 # 重构示例 使用HOC编写可维护的React Component 
 
 先上一个例子，是我公司历史上真正写出的代码。
-
+<!-- more -->
 # main.js
 ```javascript
 import React from "react";
