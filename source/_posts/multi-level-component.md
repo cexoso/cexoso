@@ -1,7 +1,8 @@
 ---
-title: multi-level-component
+title: 多层次的组件
 date: 2017-06-04 08:05:20
-tags:
+tags: [recompose,react,lodash]
+reward: true
 ---
 # 多层次的组件
 让我们从一个示例开始
@@ -22,8 +23,9 @@ export default class List extends Component {
     }
 }
 ```
-尽乎完美，因为逻辑简单，需求明确。以至于不需要任何注释。
-## 接下来我们需要隐藏一些数据，list里面的数据带有disable的就不要展示了
+尽乎完美，因为逻辑简单，需求明确。以至于不需要任何注释。接下来...
+<!-- more -->
+## 我们需要隐藏一些数据，list里面的数据带有disable的就不要展示了
 ```javascript
 import React,{ Component } from "react"
 import { chain } from "lodash"

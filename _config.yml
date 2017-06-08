@@ -64,8 +64,8 @@ pagination_dir: page
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
 
-theme: light
-#git clone git://github.com/tommy351/hexo-theme-light.git themes/light
+theme: yilia
+#git clone https://github.com/litten/hexo-theme-yilia.git themes/yilia
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
@@ -73,3 +73,23 @@ deploy:
   type: git
   repo: git@github.com:cexoso/cexoso.git
   branch: gh-pages  
+  
+# 所有文章生成
+jsonContent:
+  meta: false
+  pages: false
+  posts:
+    title: true
+    date: true
+    path: true
+    text: false
+    raw: false
+    content: false
+    slug: false
+    updated: false
+    comments: false
+    link: false
+    permalink: false
+    excerpt: false
+    categories: false
+    tags: true
