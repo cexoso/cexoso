@@ -1,7 +1,8 @@
 ---
-title: multi-level-component
+title: 多层次的组件
 date: 2017-06-04 08:05:20
-tags:
+tags: [recompose,react,lodash]
+reward: true
 ---
 # 多层次的组件
 让我们从一个示例开始

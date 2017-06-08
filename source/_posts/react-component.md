@@ -1,7 +1,8 @@
 ---
-title: react_component
+title: react垂构
 date: 2017-05-20 19:30:41
-tags:
+tags: [重构,react]
+reward: true
 ---
 
 # 重构示例 使用HOC编写可维护的React Component 
