@@ -97,7 +97,6 @@ slider:
 #smart_menu:
 #  friends: false
 smart_menu:
-  innerArchive: '所有文章'
   aboutme: '关于我'
 
 friends: false
