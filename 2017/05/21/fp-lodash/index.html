@@ -5,22 +5,22 @@
   
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-  <link rel="dns-prefetch" href="http://cexoso.github.io">
+  <link rel="dns-prefetch" href="//cexoso.github.io">
   <title>使用lodash进行编程 | 暧月的猫</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="Pointfree编程风格（草稿）">
 <meta name="keywords" content="lodash">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用lodash进行编程">
-<meta property="og:url" content="http://cexoso.github.io/2017/05/21/fp-lodash/index.html">
+<meta property="og:url" content="//cexoso.github.io/2017/05/21/fp-lodash/index.html">
 <meta property="og:site_name" content="暧月的猫">
 <meta property="og:description" content="Pointfree编程风格（草稿）">
-<meta property="og:image" content="http://cexoso.github.io/2017/05/21/fp-lodash/timo.png">
+<meta property="og:image" content="//cexoso.github.io/cexoso/2017/05/21/fp-lodash/timo.png">
 <meta property="og:updated_time" content="2017-06-08T09:42:18.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用lodash进行编程">
 <meta name="twitter:description" content="Pointfree编程风格（草稿）">
-<meta name="twitter:image" content="http://cexoso.github.io/2017/05/21/fp-lodash/timo.png">
+<meta name="twitter:image" content="//cexoso.github.io/cexoso/2017/05/21/fp-lodash/timo.png">
   
     <link rel="alternative" href="/atom.xml" title="暧月的猫" type="application/atom+xml">
   
@@ -166,7 +166,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="Pointfree编程风格（草稿）"><a href="#Pointfree编程风格（草稿）" class="headerlink" title="Pointfree编程风格（草稿）"></a>Pointfree编程风格（草稿）</h1><p><img src="/2017/05/21/fp-lodash/timo.png" alt="timo"><br><a id="more"></a><br>如下示例<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> &#123; someAction &#125; <span class="keyword">from</span> <span class="string">"./action"</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">mapStateToProps</span>(<span class="params">state</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> state.path.to.my.state;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">mapActionToProps</span>(<span class="params">dispatch</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> bindActionCreators(&#123;</div><div class="line">        <span class="attr">goDetail</span>: someAction</div><div class="line">    &#125;,dispatch)</div><div class="line">&#125;</div><div class="line">partial(bindActionCreators, )</div><div class="line">connect(mapStateToProps, mapActionToProps)</div></pre></td></tr></table></figure></p>
+        <h1 id="Pointfree编程风格（草稿）"><a href="#Pointfree编程风格（草稿）" class="headerlink" title="Pointfree编程风格（草稿）"></a>Pointfree编程风格（草稿）</h1><p><img src="/cexoso/2017/05/21/fp-lodash/timo.png" alt="timo"><br><a id="more"></a><br>如下示例<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> &#123; someAction &#125; <span class="keyword">from</span> <span class="string">"./action"</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">mapStateToProps</span>(<span class="params">state</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> state.path.to.my.state;</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">mapActionToProps</span>(<span class="params">dispatch</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> bindActionCreators(&#123;</div><div class="line">        <span class="attr">goDetail</span>: someAction</div><div class="line">    &#125;,dispatch)</div><div class="line">&#125;</div><div class="line">partial(bindActionCreators, )</div><div class="line">connect(mapStateToProps, mapActionToProps)</div></pre></td></tr></table></figure></p>
 <p>可以用lodash像如下实现<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> &#123; someAction &#125; <span class="keyword">from</span> <span class="string">"./action"</span></div><div class="line"><span class="keyword">import</span> &#123; property,partial &#125; <span class="keyword">from</span> <span class="string">"lodash"</span></div><div class="line"><span class="keyword">const</span> mapStateToProps = property(<span class="string">"path.to.my.state"</span>)</div><div class="line"><span class="keyword">const</span> mapActionToProps = partial(bindActionCreators,&#123;</div><div class="line">    <span class="attr">goDetail</span>: someAction</div><div class="line">&#125;)</div><div class="line">connect(mapStateToProps, mapActionToProps)</div></pre></td></tr></table></figure></p>
 <p>以下示例出自<a href="https://github.com/reactjs/reselect" target="_blank" rel="external">reselect</a><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> &#123; createSelector &#125; <span class="keyword">from</span> <span class="string">'reselect'</span></div><div class="line"></div><div class="line"><span class="keyword">const</span> shopItemsSelector = <span class="function"><span class="params">state</span> =&gt;</span> state.shop.items</div><div class="line"><span class="keyword">const</span> taxPercentSelector = <span class="function"><span class="params">state</span> =&gt;</span> state.shop.taxPercent</div><div class="line"></div><div class="line"><span class="keyword">const</span> subtotalSelector = createSelector(</div><div class="line">  shopItemsSelector,</div><div class="line">  items =&gt; items.reduce(<span class="function">(<span class="params">acc, item</span>) =&gt;</span> acc + item.value, <span class="number">0</span>)</div><div class="line">)</div></pre></td></tr></table></figure></p>
 <p>改写后<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> &#123; createSelector &#125; <span class="keyword">from</span> <span class="string">'reselect'</span></div><div class="line"><span class="keyword">import</span> &#123; property,reduce,partialRight &#125; <span class="keyword">from</span> <span class="string">"lodash"</span></div><div class="line"><span class="keyword">const</span> shopItemsSelector = property(<span class="string">"shop.items"</span>)</div><div class="line"><span class="keyword">const</span> taxPercentSelector = property(<span class="string">"shop.taxPercent"</span>)</div><div class="line"></div><div class="line"><span class="keyword">const</span> subtotalSelector = createSelector(</div><div class="line">  shopItemsSelector,</div><div class="line">  partialRight(reduce,<span class="string">`(acc, item) =&gt; acc + item.value,0)  </span></div><div class="line">)</div></pre></td></tr></table></figure></p>
@@ -364,14 +364,6 @@ return o(t,i(n),arguments.length<3?void 0:u(arguments[2]))}})},function(t,n,r){v
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">tdd</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">lodash</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">recompose</a>
               </li>
              
@@ -380,7 +372,15 @@ return o(t,i(n),arguments.length<3?void 0:u(arguments[2]))}})},function(t,n,r){v
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">lodash</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">重构</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">tdd</a>
               </li>
             
             <div class="clearfix"></div>
