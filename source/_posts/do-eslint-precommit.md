@@ -8,7 +8,7 @@ reward: true
 ### 使用git precommit完成前端eslint校验
 
 eslint——代码检查工具。可以在一定程度上规范前端的代码风格。也可以在编译前找到一些小错误。一个团队开发。由eslint规范代码风格可以让开发都少踩许多坑
-
+<!-- more -->
 ### 借助precommit勾子
 
 git在commit的时候会去执行.git/hooks/pre-commit文件,并且pre-commit如果exit非0值git commit就会被停止。我们需要做的是在commit的时候校验我们需求校验的文件。在没有全部通过的情况下返回非0值。
