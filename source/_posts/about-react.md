@@ -84,3 +84,7 @@ Logic类中使用了表单Form来管理Select,DropDown,Tel组件。Logic类平�
 
 # 解决方法
 暂时没有
+
+2017年6月18日, PM 11:04:00发现一篇挺不错的文章。
+[精读 React 高阶组件](https://zhuanlan.zhihu.com/p/27434557),里面提到了解决的方法。
+非常建议一读
