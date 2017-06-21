@@ -5,7 +5,6 @@ tags: lodash
 reward: true
 ---
 # Pointfree编程风格（草稿）
-![timo](fp-lodash/timo.png)
 <!-- more -->
 如下示例
 ```javascript
