@@ -6,14 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="//cexoso.github.io">
-  <title>Tag: react | 暧月的猫</title>
+  <title>使用promise实现Maybe | 暧月的猫</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="暧月的猫">
-<meta property="og:url" content="//cexoso.github.io/tags/react/index.html">
+  <meta name="description" content="使用promise实现Maybe假如一个代码12345678910111213141516171819function doSomething(list) &amp;#123;    if (Array.isArray(list)) &amp;#123;        const head = list[0]        if (head !== undefined) &amp;#123;            con">
+<meta name="keywords" content="fp,函数编程,promise">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用promise实现Maybe">
+<meta property="og:url" content="//cexoso.github.io/2017/06/21/usePromise/index.html">
 <meta property="og:site_name" content="暧月的猫">
+<meta property="og:description" content="使用promise实现Maybe假如一个代码12345678910111213141516171819function doSomething(list) &amp;#123;    if (Array.isArray(list)) &amp;#123;        const head = list[0]        if (head !== undefined) &amp;#123;            con">
+<meta property="og:updated_time" content="2017-06-22T03:18:29.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="暧月的猫">
+<meta name="twitter:title" content="使用promise实现Maybe">
+<meta name="twitter:description" content="使用promise实现Maybe假如一个代码12345678910111213141516171819function doSomething(list) &amp;#123;    if (Array.isArray(list)) &amp;#123;        const head = list[0]        if (head !== undefined) &amp;#123;            con">
   
     <link rel="alternative" href="/atom.xml" title="暧月的猫" type="application/atom+xml">
   
@@ -139,156 +144,145 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-usePromise" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      使用promise实现Maybe
+    </h1>
+  
+
+        
+        <a href="/cexoso/2017/06/21/usePromise/" class="archive-article-date">
+  	<time datetime="2017-06-21T13:08:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-06-21</time>
+</a>
+        
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="使用promise实现Maybe"><a href="#使用promise实现Maybe" class="headerlink" title="使用promise实现Maybe"></a>使用promise实现Maybe</h1><p>假如一个代码<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">doSomething</span>(<span class="params">list</span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span> (<span class="built_in">Array</span>.isArray(list)) &#123;</div><div class="line">        <span class="keyword">const</span> head = list[<span class="number">0</span>]</div><div class="line">        <span class="keyword">if</span> (head !== <span class="literal">undefined</span>) &#123;</div><div class="line">            <span class="keyword">const</span> &#123;username,tel&#125; = head;</div><div class="line">            <span class="keyword">return</span> <span class="string">`<span class="subst">$&#123;username&#125;</span>'s tel is <span class="subst">$&#123;tel&#125;</span>`</span></div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">"should has a Element"</span>)</div><div class="line">        &#125;</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">"list must be a Array"</span>)</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"><span class="keyword">try</span> &#123;</div><div class="line">    <span class="keyword">const</span> ret = doSomething([&#123;<span class="attr">username</span>: <span class="string">"xiaomin"</span>,<span class="attr">tel</span>: <span class="string">"13333332223"</span>&#125;])</div><div class="line">    <span class="built_in">console</span>.log(ret)</div><div class="line">&#125; <span class="keyword">catch</span> (e) &#123;</div><div class="line">    <span class="built_in">console</span>.error(e)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<a id="more"></a>
+<p>为了保证代码的撸捧性，做了好多判断。让人看着非常的头痛。有时候我们做业务，只关心正确的代码怎么走。但是往往还要写一堆异常的代码情况。而这些异常的情况我们又不是很care的时候。就感觉很难受了。</p>
+<h2 id="Maybe、Either"><a href="#Maybe、Either" class="headerlink" title="Maybe、Either"></a>Maybe、Either</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">doSomething</span>(<span class="params">list</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="built_in">Promise</span>.resolve(list)</div><div class="line">        .then(<span class="function"><span class="params">list</span>=&gt;</span><span class="built_in">Array</span>.isArray(list) ? list[<span class="number">0</span>] : <span class="built_in">Promise</span>.reject(<span class="string">"list must be a Array"</span>))<span class="comment">// then1</span></div><div class="line">        .then(<span class="function"><span class="params">head</span>=&gt;</span>head !== <span class="literal">undefined</span> ? head : <span class="built_in">Promise</span>.reject(<span class="string">"should has a Element"</span>)) <span class="comment">//then2</span></div><div class="line">        .then(<span class="function">(<span class="params">&#123;username,tel&#125;</span>)=&gt;</span><span class="string">`<span class="subst">$&#123;username&#125;</span>'s tel is <span class="subst">$&#123;tel&#125;</span>`</span>) <span class="comment">//then3</span></div><div class="line">&#125;</div><div class="line">doSomething([&#123;<span class="attr">username</span>: <span class="string">"xiaomin"</span>,<span class="attr">tel</span>: <span class="string">"13333332223"</span>&#125;])</div><div class="line">    .then(<span class="built_in">console</span>.error,<span class="built_in">console</span>.log)</div></pre></td></tr></table></figure>
+<p>好像没有感觉好多少？该判断的一个都没有少。使用promise来做这些事，有几个好处。</p>
+<ul>
+<li>第一个就是函数<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">* 第二个是流程从if的嵌套中解脱出来了。then的方法更像是顺序执行的。这种写法对异步更友好。假如有一天需要根据username来从服务器获取tel，我们也是只需要加一个then就可以了。</div><div class="line"></div><div class="line">* 使用then强迫拆分，实现上是让代码更解耦的。因为每一步是```lambda```，而用if else的写法则把代码揉在了一起。</div><div class="line"></div><div class="line">## 函数编程库 lodash</div><div class="line">其实lodash里面就有考虑过这种情况</div><div class="line"></div><div class="line">lodash版本的代码</div><div class="line">```javascript</div><div class="line">import &#123;chain,flowRight,head&#125; from &quot;lodash&quot;</div><div class="line">function doSomething(list) &#123;</div><div class="line">    return chain(list).map((&#123;username,tel&#125;)=&gt;`$&#123;username&#125;&apos;s tel is $&#123;tel&#125;`).head().value();</div><div class="line">&#125;</div></pre></td></tr></table></figure></li>
+</ul>
+<p>lodash 这种做法是Maybe型的，不会告诉你怎么错的。它帮你默认了错误时的效果，比如 <code>doSomething([])</code>会返回一个undefined。在实际中我感觉lodash的这种做法很实用。这也是为什么用lodash可以减少很多代码的原因。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/cexoso/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/cexoso/2017/06/17/about-react/" class="archive-article-date">
-  	<time datetime="2017-06-17T10:18:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-06-17</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/cexoso/2017/06/17/about-react/">react复杂组件</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">react</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">fp</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">复杂组件</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">函数编程</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">components</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">promise</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://cexoso.github.io/2017/06/21/usePromise/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/cexoso/2017/06/04/multi-level-component/" class="archive-article-date">
-  	<time datetime="2017-06-04T00:05:20.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-06-04</time>
-</a>
-        </div>
-    	 
+<nav id="article-nav">
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/cexoso/2017/06/04/multi-level-component/">多层次的组件</a>
-    </h1>
+  
+    <a href="/cexoso/2017/06/18/customize-update/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">自定义react更新机制</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+
+
+
+  
+  
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">recompose</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">react</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">lodash</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/cexoso/2017/05/20/react-component/" class="archive-article-date">
-  	<time datetime="2017-05-20T11:30:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-05-20</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/cexoso/2017/05/20/react-component/">react垂构</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">react</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">重构</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
-  
-    </div></section>
-  
-
-    
 
 
           </div>
@@ -311,9 +305,9 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		root: "/cexoso/",

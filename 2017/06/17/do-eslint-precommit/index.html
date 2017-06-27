@@ -6,14 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="//cexoso.github.io">
-  <title>Tag: react | 暧月的猫</title>
+  <title>使用git precommit完成前端eslint校验 | 暧月的猫</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="暧月的猫">
-<meta property="og:url" content="//cexoso.github.io/tags/react/index.html">
+  <meta name="description" content="使用git precommit完成前端eslint校验eslint——代码检查工具。可以在一定程度上规范前端的代码风格。也可以在编译前找到一些小错误。一个团队开发。由eslint规范代码风格可以让开发都少踩许多坑">
+<meta name="keywords" content="precommit,eslint,规范">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用git precommit完成前端eslint校验">
+<meta property="og:url" content="//cexoso.github.io/2017/06/17/do-eslint-precommit/index.html">
 <meta property="og:site_name" content="暧月的猫">
+<meta property="og:description" content="使用git precommit完成前端eslint校验eslint——代码检查工具。可以在一定程度上规范前端的代码风格。也可以在编译前找到一些小错误。一个团队开发。由eslint规范代码风格可以让开发都少踩许多坑">
+<meta property="og:updated_time" content="2017-06-27T02:38:15.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="暧月的猫">
+<meta name="twitter:title" content="使用git precommit完成前端eslint校验">
+<meta name="twitter:description" content="使用git precommit完成前端eslint校验eslint——代码检查工具。可以在一定程度上规范前端的代码风格。也可以在编译前找到一些小错误。一个团队开发。由eslint规范代码风格可以让开发都少踩许多坑">
   
     <link rel="alternative" href="/atom.xml" title="暧月的猫" type="application/atom+xml">
   
@@ -139,156 +144,154 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-do-eslint-precommit" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      使用git precommit完成前端eslint校验
+    </h1>
+  
+
+        
+        <a href="/cexoso/2017/06/17/do-eslint-precommit/" class="archive-article-date">
+  	<time datetime="2017-06-17T01:11:55.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-06-17</time>
+</a>
+        
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="使用git-precommit完成前端eslint校验"><a href="#使用git-precommit完成前端eslint校验" class="headerlink" title="使用git precommit完成前端eslint校验"></a>使用git precommit完成前端eslint校验</h3><p>eslint——代码检查工具。可以在一定程度上规范前端的代码风格。也可以在编译前找到一些小错误。一个团队开发。由eslint规范代码风格可以让开发都少踩许多坑<br><a id="more"></a></p>
+<h3 id="借助precommit勾子"><a href="#借助precommit勾子" class="headerlink" title="借助precommit勾子"></a>借助precommit勾子</h3><p>git在commit的时候会去执行.git/hooks/pre-commit文件,并且pre-commit如果exit非0值git commit就会被停止。我们需要做的是在commit的时候校验我们需求校验的文件。在没有全部通过的情况下返回非0值。</p>
+<p>当然也可以在push的时候借助pre-push勾子完成校验（不在此次讨论范围内）</p>
+<h3 id="具体实现"><a href="#具体实现" class="headerlink" title="具体实现"></a>具体实现</h3><p>写bash总感觉总感觉不是前端做的事，所幸的我们可以借助一个模块<a href="https://github.com/observing/pre-commit" target="_blank" rel="external">pre-commit</a>,我们只需要在 package.json中写上相应字段去运行检查js的文件就好了：</p>
+<p>我的配置是：</p>
+<h2 id="package-jons"><a href="#package-jons" class="headerlink" title="package.jons"></a>package.jons</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="string">"pre-commit"</span>: &#123;</div><div class="line">        <span class="string">"silent"</span>: <span class="literal">true</span>,</div><div class="line">        <span class="string">"run"</span>: [<span class="string">"checkJs"</span>]</div><div class="line">    &#125;,</div><div class="line">    <span class="string">"scripts"</span>: &#123;</div><div class="line">        <span class="string">"checkJs"</span>: <span class="string">"node ./bin/lintJs.js"</span>,</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="bin-lintJs-js"><a href="#bin-lintJs-js" class="headerlink" title="./bin/lintJs.js"></a>./bin/lintJs.js</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> shell = <span class="built_in">require</span>(<span class="string">"shelljs"</span>);</div><div class="line"><span class="keyword">const</span> _ = <span class="built_in">require</span>(<span class="string">"lodash"</span>);</div><div class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">"path"</span>)</div><div class="line"><span class="keyword">const</span> &#123; split, isEmpty, filter, last, at, curry, map, groupBy, partialRight, join, get &#125; = _</div><div class="line"><span class="keyword">const</span> beforeTime = <span class="string">"2017/05/22"</span>;</div><div class="line"><span class="keyword">const</span> commonEslintrcPath = path.resolve(__dirname, <span class="string">"../.eslintrc.js"</span>);</div><div class="line"><span class="keyword">const</span> doExec = <span class="function"><span class="params">cmd</span> =&gt;</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function"><span class="params">resolve</span> =&gt;</span> shell.exec(cmd, &#123; <span class="attr">silent</span>: <span class="literal">true</span> &#125;, (code, stdout, stderr) =&gt; resolve(&#123; code, <span class="attr">content</span>: stdout || stderr &#125;)))</div><div class="line"><span class="keyword">const</span> isScript = <span class="function"><span class="params">filename</span> =&gt;</span> /\.jsx?$/.test(filename)</div><div class="line"><span class="keyword">const</span> isFileHasLogbeforeTime = curry(<span class="function"><span class="keyword">function</span> (<span class="params">time, file</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> doExec(<span class="string">`git log --before=<span class="subst">$&#123;time&#125;</span> -- <span class="subst">$&#123;file&#125;</span>`</span>).then(<span class="function">(<span class="params">&#123; content &#125;</span>) =&gt;</span> (&#123;</div><div class="line">        <span class="attr">exist</span>: !isEmpty(content),</div><div class="line">        file</div><div class="line">    &#125;))</div><div class="line">&#125;)</div><div class="line"><span class="keyword">const</span> isFilebefore = isFileHasLogbeforeTime(beforeTime);</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">doEslint</span>(<span class="params">filenames</span>) </span>&#123;</div><div class="line">    <span class="keyword">const</span> [afterPaths, beforePaths] = map(filenames, name =&gt; join(name, <span class="string">" "</span>))</div><div class="line">    <span class="keyword">return</span> <span class="built_in">Promise</span>.all([</div><div class="line">        isEmpty(afterPaths) ? <span class="literal">null</span> : doExec(<span class="string">`eslint <span class="subst">$&#123;afterPaths&#125;</span>`</span>),</div><div class="line">        isEmpty(beforePaths) ? <span class="literal">null</span> : doExec(<span class="string">`eslint -c <span class="subst">$&#123;commonEslintrcPath&#125;</span> <span class="subst">$&#123;beforePaths&#125;</span>`</span>)</div><div class="line">    ])</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">filterFiles</span>(<span class="params">item</span>) </span>&#123;</div><div class="line">    <span class="keyword">const</span> [HEAD] = at(item, [<span class="number">0</span>]);</div><div class="line">    <span class="keyword">return</span> <span class="regexp">/[ACMR]/</span>.test(HEAD)</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">gloupyByDate</span>(<span class="params">allFiles</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="built_in">Promise</span>.all(map(allFiles, isFilebefore))</div><div class="line">        .then(partialRight(groupBy, <span class="string">"exist"</span>))</div><div class="line">        .then(<span class="function"><span class="params">res</span> =&gt;</span> &#123;</div><div class="line">            <span class="keyword">const</span> beforeDate = map(res[<span class="string">"true"</span>], <span class="string">"file"</span>)</div><div class="line">            <span class="keyword">const</span> afterDate = map(res[<span class="string">"false"</span>], <span class="string">"file"</span>)</div><div class="line">            <span class="keyword">return</span> isEmpty(afterDate) &amp;&amp; isEmpty(beforeDate) ? <span class="built_in">Promise</span>.reject(<span class="string">"files empty"</span>) : [afterDate, beforeDate]</div><div class="line">        &#125;)</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">getFilesUntranck</span>(<span class="params"></span>) </span>&#123; <span class="comment">//Add Copied Modified Renamed </span></div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</div><div class="line">        shell.exec(<span class="string">"git status -s projects/ydxs_front"</span>, &#123; <span class="attr">silent</span>: <span class="literal">true</span> &#125;, (code, stdout) =&gt; &#123;</div><div class="line">            <span class="keyword">const</span> files = _(stdout)</div><div class="line">                .split(<span class="string">"\n"</span>)</div><div class="line">                .filter(filterFiles)</div><div class="line">                .map(<span class="function"><span class="params">str</span> =&gt;</span> last(split(str, <span class="string">" "</span>)))</div><div class="line">                .value()</div><div class="line">            isEmpty(files) ? reject(<span class="string">"empty files list"</span>) : resolve(files);</div><div class="line">        &#125;)</div><div class="line">    &#125;)</div><div class="line">&#125;</div><div class="line">getFilesUntranck()</div><div class="line">    .then(<span class="function"><span class="params">files</span> =&gt;</span> filter(files, isScript))</div><div class="line">    .then(gloupyByDate)</div><div class="line">    .then(doEslint)</div><div class="line">    .then(<span class="function"><span class="params">ress</span> =&gt;</span> &#123;</div><div class="line">        <span class="keyword">const</span> [after, before] = ress</div><div class="line">        <span class="keyword">const</span> afterError = get(after, <span class="string">"content"</span>)</div><div class="line">        <span class="keyword">const</span> beforeError = get(before, <span class="string">"content"</span>)</div><div class="line">        beforeError &amp;&amp; <span class="built_in">console</span>.log(<span class="string">"旧文件:\n"</span> + beforeError)</div><div class="line">        afterError &amp;&amp; <span class="built_in">console</span>.log(<span class="string">"新文件:\n"</span> + afterError)</div><div class="line">        shell.exit(get(after, <span class="string">"code"</span>) || get(before, <span class="string">"code"</span>))</div><div class="line">    &#125;)</div></pre></td></tr></table></figure>
+<p>具体的逻辑是通过 <code>git status -s</code> 查看当前文件状态并且根据状态筛选出 ACMR(added copied modified rename)状态的文件(具体含义请自行查看git文档)，再根据后辍名筛选出需要lint的文件——.js或者jsx,接着我们还应用了一套规则老文件与新文件应用不同的eslintrc配置用于平滑过滤。老文件的校验会比较松一些。通过<code>git log --until 2017/05/22 xx.js</code>可以查看出xx.js在2017/05/22之前有没有记录。如果没有记录就认为是新文件，如果有记录就认为是老文件。最后通过<code>eslint</code>命令校验文件并且在不通过的时候<code>shell.exit(code)</code>此时的code应该为非0值以阻止commit动作。 还有一个小技巧，可以指定<code>git status -s director1 director2</code>来筛选目录。</p>
+<p>最后 <code>git commit -m &quot;something&quot; -n</code>使用<code>-n</code>是可以跳过precommit的。我更推荐的是开发者使用编辑器自带的工具来完成代码的校验。纯前端技术是没法强制校验的，只能做为辅助。要强制校验入库的话只能选用服务器端来完成咯。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/cexoso/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/cexoso/2017/06/17/about-react/" class="archive-article-date">
-  	<time datetime="2017-06-17T10:18:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-06-17</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/cexoso/2017/06/17/about-react/">react复杂组件</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">react</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">precommit</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">复杂组件</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">eslint</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">components</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">规范</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://cexoso.github.io/2017/06/17/do-eslint-precommit/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/cexoso/2017/06/04/multi-level-component/" class="archive-article-date">
-  	<time datetime="2017-06-04T00:05:20.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-06-04</time>
-</a>
-        </div>
-    	 
+<nav id="article-nav">
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/cexoso/2017/06/04/multi-level-component/">多层次的组件</a>
-    </h1>
+    <a href="/cexoso/2017/06/17/about-react/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          react复杂组件
+        
+      </div>
+    </a>
+  
+  
+    <a href="/cexoso/2017/06/04/multi-level-component/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">多层次的组件</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+
+
+
+  
+  
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">recompose</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">react</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">lodash</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/cexoso/2017/05/20/react-component/" class="archive-article-date">
-  	<time datetime="2017-05-20T11:30:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-05-20</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/cexoso/2017/05/20/react-component/">react垂构</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">react</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">重构</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
-  
-    </div></section>
-  
-
-    
 
 
           </div>
@@ -311,9 +314,9 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		root: "/cexoso/",

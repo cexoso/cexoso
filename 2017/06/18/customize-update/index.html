@@ -6,14 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="//cexoso.github.io">
-  <title>Tag: react | 暧月的猫</title>
+  <title>自定义react更新机制 | 暧月的猫</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="暧月的猫">
-<meta property="og:url" content="//cexoso.github.io/tags/react/index.html">
+  <meta name="description" content="自定义react更新机制react以virtual dom和diff算法闻名。简单的说就是react会在内存中先根据组件先渲染出描述dom的虚拟dom。并且将虚拟dom与之前的虚拟dom对比差异，只渲染差异部分。这种做法能让开发者不关心dom操作，并且还有说得过去的性能。一般来说，我们是不需要去关注dom操作的。">
+<meta name="keywords" content="customize,update">
+<meta property="og:type" content="article">
+<meta property="og:title" content="自定义react更新机制">
+<meta property="og:url" content="//cexoso.github.io/2017/06/18/customize-update/index.html">
 <meta property="og:site_name" content="暧月的猫">
+<meta property="og:description" content="自定义react更新机制react以virtual dom和diff算法闻名。简单的说就是react会在内存中先根据组件先渲染出描述dom的虚拟dom。并且将虚拟dom与之前的虚拟dom对比差异，只渲染差异部分。这种做法能让开发者不关心dom操作，并且还有说得过去的性能。一般来说，我们是不需要去关注dom操作的。">
+<meta property="og:updated_time" content="2017-06-22T03:18:29.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="暧月的猫">
+<meta name="twitter:title" content="自定义react更新机制">
+<meta name="twitter:description" content="自定义react更新机制react以virtual dom和diff算法闻名。简单的说就是react会在内存中先根据组件先渲染出描述dom的虚拟dom。并且将虚拟dom与之前的虚拟dom对比差异，只渲染差异部分。这种做法能让开发者不关心dom操作，并且还有说得过去的性能。一般来说，我们是不需要去关注dom操作的。">
   
     <link rel="alternative" href="/atom.xml" title="暧月的猫" type="application/atom+xml">
   
@@ -139,156 +144,146 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-customize-update" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      自定义react更新机制
+    </h1>
+  
+
+        
+        <a href="/cexoso/2017/06/18/customize-update/" class="archive-article-date">
+  	<time datetime="2017-06-18T11:23:20.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-06-18</time>
+</a>
+        
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="自定义react更新机制"><a href="#自定义react更新机制" class="headerlink" title="自定义react更新机制"></a>自定义react更新机制</h1><p>react以virtual dom和diff算法闻名。简单的说就是react会在内存中先根据组件先渲染出描述dom的虚拟dom。并且将虚拟dom与之前的虚拟dom对比差异，只渲染差异部分。这种做法能让开发者不关心dom操作，并且还有说得过去的性能。一般来说，我们是不需要去关注dom操作的。<br><a id="more"></a></p>
+<p>但是情况都有例外的，思考一些特别的情况，比如计时器，而且是毫秒级别的那种，在页面上以毫秒级别更新的。又或者是自己实现滚动机制,要频繁的去更新Style的。比如这样:</p>
+<h2 id="scrollContainer-js"><a href="#scrollContainer-js" class="headerlink" title="scrollContainer.js"></a>scrollContainer.js</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">ScrollDiv</span>(<span class="params">props</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> (&lt;div class="position_css"</div><div class="line">        style=&#123;&#123;</div><div class="line">            top: props.top</div><div class="line">        &#125;&#125;</div><div class="line">    &gt;</div><div class="line">        &#123;props.children&#125;</div><div class="line">    &lt;/div&gt;)</div><div class="line">&#125;</div><div class="line"><span class="comment">//假设这样使用</span></div><div class="line">&lt;ScrollDiv top=&#123;<span class="keyword">this</span>.state.top&#125; onScroll=&#123;<span class="keyword">this</span>.onScroll&#125;&gt;</div><div class="line">    &#123;</div><div class="line">        map(list,item=&gt;&lt;span&gt;&#123;item.name&#125;&lt;/span&gt;)</div><div class="line">    &#125;</div><div class="line">&lt;<span class="regexp">/ScrollDiv&gt;</span></div></pre></td></tr></table></figure>
+<p>那在top变化频繁的时候每次都会经过render,然后diff，再更新style里的top值。其实在我们知道该怎么更新的情况下，这套流程走下来多少有点浪费。可以改成：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">ScrollDiv</span> <span class="keyword">extends</span> <span class="title">Components</span> </span>&#123;</div><div class="line">    shouldComponentUpdate(nextProps) &#123;</div><div class="line">        <span class="comment">//自己去实现更新dom</span></div><div class="line">        <span class="keyword">this</span>.scroller.style.top = nextProps.top;</div><div class="line"></div><div class="line">        <span class="comment">//要阻止这个组件刷新</span></div><div class="line">        <span class="comment">//可以不早一直返回false但是不要让top的改变引起整个组件刷新</span></div><div class="line">        <span class="keyword">return</span> <span class="literal">false</span></div><div class="line">    &#125;</div><div class="line">    render() &#123;</div><div class="line">        <span class="keyword">return</span> (&lt;div class="position_css" ref=&#123;ref=&gt;this.scroller = ref&#125;&gt;</div><div class="line">            &#123;props.children&#125;</div><div class="line">        &lt;/div&gt;)</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>不保证这个代码的质量，只是提供一种思路。以后能不借助react-iscroll这个不是很优秀的库也能做到自己的scoll。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/cexoso/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/cexoso/2017/06/17/about-react/" class="archive-article-date">
-  	<time datetime="2017-06-17T10:18:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-06-17</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/cexoso/2017/06/17/about-react/">react复杂组件</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">react</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">customize</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">复杂组件</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">components</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">update</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://cexoso.github.io/2017/06/18/customize-update/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/cexoso/2017/06/04/multi-level-component/" class="archive-article-date">
-  	<time datetime="2017-06-04T00:05:20.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-06-04</time>
-</a>
-        </div>
-    	 
+<nav id="article-nav">
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/cexoso/2017/06/04/multi-level-component/">多层次的组件</a>
-    </h1>
+    <a href="/cexoso/2017/06/21/usePromise/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          使用promise实现Maybe
+        
+      </div>
+    </a>
+  
+  
+    <a href="/cexoso/2017/06/17/about-react/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">react复杂组件</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+
+
+
+  
+  
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">recompose</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">react</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">lodash</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/cexoso/2017/05/20/react-component/" class="archive-article-date">
-  	<time datetime="2017-05-20T11:30:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-05-20</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/cexoso/2017/05/20/react-component/">react垂构</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">react</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">重构</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
-  
-    </div></section>
-  
-
-    
 
 
           </div>
@@ -311,9 +306,9 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		root: "/cexoso/",

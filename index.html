@@ -141,6 +141,278 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-usePromise" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/cexoso/2017/06/21/usePromise/">使用promise实现Maybe</a>
+    </h1>
+  
+
+        
+        <a href="/cexoso/2017/06/21/usePromise/" class="archive-article-date">
+  	<time datetime="2017-06-21T13:08:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-06-21</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="使用promise实现Maybe"><a href="#使用promise实现Maybe" class="headerlink" title="使用promise实现Maybe"></a>使用promise实现Maybe</h1><p>假如一个代码<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">doSomething</span>(<span class="params">list</span>) </span>&#123;</div><div class="line">    <span class="keyword">if</span> (<span class="built_in">Array</span>.isArray(list)) &#123;</div><div class="line">        <span class="keyword">const</span> head = list[<span class="number">0</span>]</div><div class="line">        <span class="keyword">if</span> (head !== <span class="literal">undefined</span>) &#123;</div><div class="line">            <span class="keyword">const</span> &#123;username,tel&#125; = head;</div><div class="line">            <span class="keyword">return</span> <span class="string">`<span class="subst">$&#123;username&#125;</span>'s tel is <span class="subst">$&#123;tel&#125;</span>`</span></div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">"should has a Element"</span>)</div><div class="line">        &#125;</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">"list must be a Array"</span>)</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"><span class="keyword">try</span> &#123;</div><div class="line">    <span class="keyword">const</span> ret = doSomething([&#123;<span class="attr">username</span>: <span class="string">"xiaomin"</span>,<span class="attr">tel</span>: <span class="string">"13333332223"</span>&#125;])</div><div class="line">    <span class="built_in">console</span>.log(ret)</div><div class="line">&#125; <span class="keyword">catch</span> (e) &#123;</div><div class="line">    <span class="built_in">console</span>.error(e)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+        
+          <a class="article-more-a" href="/cexoso/2017/06/21/usePromise/#more">查看全文 >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">fp</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">函数编程</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">promise</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/cexoso/2017/06/21/usePromise/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+  
+    <article id="post-customize-update" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/cexoso/2017/06/18/customize-update/">自定义react更新机制</a>
+    </h1>
+  
+
+        
+        <a href="/cexoso/2017/06/18/customize-update/" class="archive-article-date">
+  	<time datetime="2017-06-18T11:23:20.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-06-18</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="自定义react更新机制"><a href="#自定义react更新机制" class="headerlink" title="自定义react更新机制"></a>自定义react更新机制</h1><p>react以virtual dom和diff算法闻名。简单的说就是react会在内存中先根据组件先渲染出描述dom的虚拟dom。并且将虚拟dom与之前的虚拟dom对比差异，只渲染差异部分。这种做法能让开发者不关心dom操作，并且还有说得过去的性能。一般来说，我们是不需要去关注dom操作的。<br></p>
+        
+          <a class="article-more-a" href="/cexoso/2017/06/18/customize-update/#more">查看全文 >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">customize</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">update</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/cexoso/2017/06/18/customize-update/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+  
+    <article id="post-about-react" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/cexoso/2017/06/17/about-react/">react复杂组件</a>
+    </h1>
+  
+
+        
+        <a href="/cexoso/2017/06/17/about-react/" class="archive-article-date">
+  	<time datetime="2017-06-17T10:18:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-06-17</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="react复杂组件"><a href="#react复杂组件" class="headerlink" title="react复杂组件"></a>react复杂组件</h1><p>开门见山的说。我刚开始认为react写一个组件是非常简单的事。因为react好像就是为了组件设计而生的，React的应用就是由组件组合而成的。</p>
+        
+          <a class="article-more-a" href="/cexoso/2017/06/17/about-react/#more">查看全文 >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">react</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">复杂组件</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">components</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/cexoso/2017/06/17/about-react/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+  
+    <article id="post-do-eslint-precommit" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/cexoso/2017/06/17/do-eslint-precommit/">使用git precommit完成前端eslint校验</a>
+    </h1>
+  
+
+        
+        <a href="/cexoso/2017/06/17/do-eslint-precommit/" class="archive-article-date">
+  	<time datetime="2017-06-17T01:11:55.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-06-17</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="使用git-precommit完成前端eslint校验"><a href="#使用git-precommit完成前端eslint校验" class="headerlink" title="使用git precommit完成前端eslint校验"></a>使用git precommit完成前端eslint校验</h3><p>eslint——代码检查工具。可以在一定程度上规范前端的代码风格。也可以在编译前找到一些小错误。一个团队开发。由eslint规范代码风格可以让开发都少踩许多坑<br></p>
+        
+          <a class="article-more-a" href="/cexoso/2017/06/17/do-eslint-precommit/#more">查看全文 >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">precommit</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">eslint</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">规范</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/cexoso/2017/06/17/do-eslint-precommit/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+  
     <article id="post-multi-level-component" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -232,7 +504,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="Pointfree编程风格（草稿）"><a href="#Pointfree编程风格（草稿）" class="headerlink" title="Pointfree编程风格（草稿）"></a>Pointfree编程风格（草稿）</h1><p><img src="/cexoso/2017/05/21/fp-lodash/timo.png" alt="timo"><br></p>
+        <h1 id="Pointfree编程风格（草稿）"><a href="#Pointfree编程风格（草稿）" class="headerlink" title="Pointfree编程风格（草稿）"></a>Pointfree编程风格（草稿）</h1>
         
           <a class="article-more-a" href="/cexoso/2017/05/21/fp-lodash/#more">查看全文 >></a>
         
@@ -558,6 +830,46 @@ return o(t,i(n),arguments.length<3?void 0:u(arguments[2]))}})},function(t,n,r){v
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">tdd</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">复杂组件</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">components</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">precommit</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">eslint</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">规范</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">customize</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">update</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">fp</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">函数编程</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">promise</a>
               </li>
             
             <div class="clearfix"></div>
