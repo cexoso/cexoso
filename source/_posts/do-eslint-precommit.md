@@ -39,18 +39,18 @@ git在commit的时候会去执行.git/hooks/pre-commit文件,并且pre-commit如
 const shell = require("shelljs");
 const _ = require("lodash");
 const path = require("path")
-const { split, isEmpty, filter, last, at, curry, map, groupBy, partialRight, join,get } = _
-const untilTime = "2017/05/22";
+const { split, isEmpty, filter, last, at, curry, map, groupBy, partialRight, join, get } = _
+const beforeTime = "2017/05/22";
 const commonEslintrcPath = path.resolve(__dirname, "../.eslintrc.js");
 const doExec = cmd => new Promise(resolve => shell.exec(cmd, { silent: true }, (code, stdout, stderr) => resolve({ code, content: stdout || stderr })))
 const isScript = filename => /\.jsx?$/.test(filename)
-const isFileHasLoguntilTime = curry(function (time, file) {
-    return doExec(`git log --until=${time} -- ${file}`).then(({content}) => ({
+const isFileHasLogbeforeTime = curry(function (time, file) {
+    return doExec(`git log --before=${time} -- ${file}`).then(({ content }) => ({
         exist: !isEmpty(content),
         file
     }))
 })
-const isFileuntil = isFileHasLoguntilTime(untilTime);
+const isFilebefore = isFileHasLogbeforeTime(beforeTime);
 function doEslint(filenames) {
     const [afterPaths, beforePaths] = map(filenames, name => join(name, " "))
     return Promise.all([
@@ -63,12 +63,12 @@ function filterFiles(item) {
     return /[ACMR]/.test(HEAD)
 }
 function gloupyByDate(allFiles) {
-    return Promise.all(map(allFiles, isFileuntil))
+    return Promise.all(map(allFiles, isFilebefore))
         .then(partialRight(groupBy, "exist"))
         .then(res => {
-            const afterDate = map(res["true"], "file")
-            const beforeDate = map(res["false"], "file")
-            return isEmpty(afterDate) && afterDate(beforeDate) ? Promise.reject("files empty") : [afterDate, beforeDate]
+            const beforeDate = map(res["true"], "file")
+            const afterDate = map(res["false"], "file")
+            return isEmpty(afterDate) && isEmpty(beforeDate) ? Promise.reject("files empty") : [afterDate, beforeDate]
         })
 }
 function getFilesUntranck() { //Add Copied Modified Renamed 
@@ -87,11 +87,13 @@ getFilesUntranck()
     .then(files => filter(files, isScript))
     .then(gloupyByDate)
     .then(doEslint)
-    .then(ress=>{
-        const [f,s] = ress
-        console.log(get(f,"content"))
-        console.log(get(s,"content"))
-        shell.exit(get(f,"code") || get(s,"code"))
+    .then(ress => {
+        const [after, before] = ress
+        const afterError = get(after, "content")
+        const beforeError = get(before, "content")
+        beforeError && console.log("旧文件:\n" + beforeError)
+        afterError && console.log("新文件:\n" + afterError)
+        shell.exit(get(after, "code") || get(before, "code"))
     })
 ```
 
