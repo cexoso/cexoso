@@ -141,6 +141,57 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-suggest-for-angular-js" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/cexoso/2017/07/17/suggest-for-angular-js/">一次重构angular1.x代码建议收集</a>
+    </h1>
+  
+
+        
+        <a href="/cexoso/2017/07/17/suggest-for-angular-js/" class="archive-article-date">
+  	<time datetime="2017-07-17T08:24:31.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-17</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="一次重构angular1-x代码建议收集（这可能是一篇过时的文章了）"><a href="#一次重构angular1-x代码建议收集（这可能是一篇过时的文章了）" class="headerlink" title="一次重构angular1.x代码建议收集（这可能是一篇过时的文章了）"></a>一次重构angular1.x代码建议收集（这可能是一篇过时的文章了）</h1><h3 id="html中没用到的变量不要挂载在-scope上"><a href="#html中没用到的变量不要挂载在-scope上" class="headerlink" title="html中没用到的变量不要挂载在$scope上"></a>html中没用到的变量不要挂载在$scope上</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$scope.getQueryParams = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;&#125;;<span class="comment">//错误</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">getQueryParams</span>(<span class="params"></span>) </span>&#123;&#125;<span class="comment">//正确</span></div></pre></td></tr></table></figure>
+<p><code>getQueryParams</code>只在js文件中被调用,就不应该挂在$scope上。<br></p>
+        
+          <a class="article-more-a" href="/cexoso/2017/07/17/suggest-for-angular-js/#more">查看全文 >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/cexoso/2017/07/17/suggest-for-angular-js/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+  
     <article id="post-vs-code" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -735,70 +786,10 @@
 
 
   
-    <article id="post-TDD" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/cexoso/2017/05/13/TDD/">敏捷开发TDD</a>
-    </h1>
-  
-
-        
-        <a href="/cexoso/2017/05/13/TDD/" class="archive-article-date">
-  	<time datetime="2017-05-13T03:03:20.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-05-13</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>这篇文章主要是安利测试驱动开发的</p>
-<p>TDD（测试驱动开发）是敏捷开发中的一项核心实践和技术。区别于传统的前端开发TDD的有如下优势：</p>
-<h2 id="1-专注"><a href="#1-专注" class="headerlink" title="1.专注"></a>1.专注</h2><p>编程是需要反馈的，你写下一段代码的时候，心中就<strong>期望</strong>着这段代码的行为。在前端开发的时候，我们可能这样：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">a. 编写代码，</div><div class="line">b. 打开浏览器进入挂载了代码的网页</div><div class="line">c. 触发代码运行（比如必需在填写好一个表单并点击保存后，才可能触发数据处理的函数）</div><div class="line">d. 通过看输出或者页面效果来评价这段代码是不是正常的动作了</div></pre></td></tr></table></figure></p>
-<p>在以上的步骤中，可能在a和b之前还有代码的编译过程（像webpack把es6，typescript编译合并的过程）。<br></p>
-        
-          <a class="article-more-a" href="/cexoso/2017/05/13/TDD/#more">查看全文 >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">tdd</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/cexoso/2017/05/13/TDD/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-  
+    <nav id="page-nav">
+      <span class="page-number current">1</span><a class="page-number" href="/cexoso/page/2/">2</a><a class="extend next" rel="next" href="/cexoso/page/2/">Next &raquo;</a>
+    </nav>
   
 
 
