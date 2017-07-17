@@ -1,10 +1,10 @@
 ---
-title: 一次重构angular1.x代码建议收集
+title: 一次重构angular1.x代码建议收集
 date: 2017-07-17 16:24:31
 tags:
 ---
 
-# 关于angular1.x代码建议收集（这可能是一篇过时的文章了）
+# 一次重构angular1.x代码建议收集（这可能是一篇过时的文章了）
 
 ### html中没用到的变量不要挂载在$scope上
 ```javascript
@@ -12,8 +12,8 @@ $scope.getQueryParams = function () {};//错误
 function getQueryParams() {}//正确
 ```
 `getQueryParams`只在js文件中被调用,就不应该挂在$scope上。
-
-### 优化
+<!-- more -->
+### 优化篇
 ```javascript
 $scope.cancelVerify = function (contract) {
     util.confirm('确定要撤销复核吗?', {
