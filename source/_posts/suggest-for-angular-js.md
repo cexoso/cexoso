@@ -1,5 +1,5 @@
 ---
-title: 一次重构angular1.x代码建议收集
+title: 一次重构angular代码建议收集
 date: 2017-07-17 16:24:31
 tags:
 ---
@@ -209,3 +209,129 @@ const compareDate = (startDate, endDate) => toDate(startDate) > toDate(endDate)
 
 ### 吐槽
 看到有`return o.selected === true;`的代码。js虽然是弱类型语法，但是如果严格一点，能确保`selected`是`bool值`的话 完全可以写成`return o.selected`。
+
+## 次日新增如下内容
+
+```javascript
+const appPrices = [];
+$.each(item.applicationPrices || [], function (i, d) {
+    appPrices.push({
+        id: d.price,
+        text: d.unit
+    });
+});
+
+$dialogScope.ddlConfigSMSPrice = {
+    allowClear: false,
+    data: appPrices,
+    placeholder: '标准单价',
+    onchange2(price) {
+        $dialogScope.data.unit = price.text;
+    }
+};
+```
+使用`lodash`重构如下
+```javascript
+import { map } from 'lodash'
+$dialogScope.ddlConfigSMSPrice = {
+    allowClear: false,
+    data: map(item.applicationPrices , ({ price,unit })=>({
+        id: price,
+        text: unit
+    })),
+    placeholder: '标准单价',
+    onchange2(price) {
+        $dialogScope.data.unit = price.text;
+    }
+};
+```
+`map`方式总会返回正确的类型。不需要花哨的代码去判断`undefined`。
+
+类似代码还有如下
+```javascript
+const ddlData = [];
+let isCompanyValid = false;
+$.each(data, function (i, d) {
+    ddlData.push({
+        id: d.company_id,
+        text: d.company_name
+    });
+    if (d.company_id === $scope.contractBaseInfo.company_id) {
+        isCompanyValid = true;
+    }
+});
+$scope.ddlConfigCompany.data = ddlData;
+```
+理论上我觉得`isCompanyValid`与`ddlData`应该分别处理而不应该合在一起处理的
+```javascript
+const isCompanyValid = findIndex(data,['company_id',$scope.contractBaseInfo.company_id]) !== -1
+$scope.ddlConfigCompany.data = map(data, ({ company_id, company_name }) => ({
+    id: company_id,
+    text: company_name
+}));
+```
+`findIndex(data,['company_id',$scope.contractBaseInfo.company_id])`这个函数会处理data里面的每一个元素，找到属性`company_id`为`$scope.contractBaseInfo.company_id`的元素下标并返回，如果找不到就返回`-1`。虽然的函数的签名很奇怪，但是读懂后使用会很方便。
+
+部分人可能觉得性能会有问题。个人觉得这点小性能实在不应该成为代码规范的拦路石。如果实在有强迫症的人可以采取折中的方法。
+```javascript
+let isCompanyValid = false
+$scope.ddlConfigCompany.data = map(data, ({ company_id, company_name }) => {
+    isCompanyValid = company_id === $scope.contractBaseInfo.company_id
+    return {
+        id: company_id,
+        text: company_name
+    }
+});
+```
+这可能违反了`只做一件事的原则`，当一个函数做了两件事三件事更多件事的时候。我们在处理一件事的时候就会被其它的事干扰到。而人的精力是有限的。被干扰的后果是不知不觉的引进了`bug`所以保证你的函数简单是最好的方法。
+
+有的人可能觉得函数编程比较难看懂，比如`const isCompanyValid = findIndex(data,['company_id',$scope.contractBaseInfo.company_id]) !== -1`。那是因为一句话做了太多的事情了。
+```javascript
+const includesWithPropertyEq = compose(eq(-1),findIndex);
+const isCompanyValid = includesWithPropertyEq(data,['company_id',$scope.contractBaseInfo.company_id]);
+```
+利用函数的组合可以把多件事情组合成一个函数。然后通过命名让别人知道你的函数是作用。（以上代码假装`eq`是`柯里化`的
+
+```javascript
+const ddlData = [];
+// 隐藏
+// xx签约-联营区域:7f828b1b-fce8-11e4-bed8-00155d02c832,
+// 联营签约-xx结算:7f84cfad-fce8-11e4-bed8-00155d02c832
+$.each(data, function (i, d) {
+    if (d.property_id != '7f84cfad-fce8-11e4-bed8-00155d02c832') {
+        ddlData.push({
+            id: d.property_id,
+            text: d.property_name
+        });
+    }
+
+});
+$scope.ddlConfigContractNature.data = ddlData;
+```
+代码本身有注释非常好，让人知道那一串`7f84cfad-fce8-11e4-bed8-00155d02c832`是个什么玩意。如果没有注释的话一定要记得取个好名字比如。
+`const aGoodName = '7f84cfad-fce8-11e4-bed8-00155d02c832'`（示例而已，你自己就不要起`aGoodName`了）
+
+但是代码本身做的事其实就是`filter`,或者`reject`（`reject`与`filter`是反逻辑的）,所以：
+
+```javascript
+// 隐藏
+// xx签约-联营区域:7f828b1b-fce8-11e4-bed8-00155d02c832,
+// 联营签约-xx结算:7f84cfad-fce8-11e4-bed8-00155d02c832
+$scope.ddlConfigContractNature.data = reject(data,['property_id','7f84cfad-fce8-11e4-bed8-00155d02c832'])
+```
+如果你还记得上面那个奇怪的签名。那也能理解这个签名。
+> `reject(data,['property_id','7f84cfad-fce8-11e4-bed8-00155d02c832']`的意思是把`data`里面，属性`property_id`为`7f84cfad-fce8-11e4-bed8-00155d02c832`的元素去掉。与`reject(data,({property_id})=>property_id === '7f84cfad-fce8-11e4-bed8-00155d02c832')`是等价的，`filter(data,({property_id})=>property_id !== '7f84cfad-fce8-11e4-bed8-00155d02c832')`实现了相同的功能。（因为`reject`与`filter`是反逻辑的）
+
+### 上面的代码还是有问题的，因为原代码做了一个命名的转换，但是我们没有做。
+修改后如下
+```javascript
+$scope.ddlConfigContractNature.data = chain(data)
+                .reject(['property_id', '7f84cfad-fce8-11e4-bed8-00155d02c832'])
+                .map(({ property_id, property_name }) => ({ id: property_id, text: property_name }))
+                .value();
+```
+`chain`做了打包，是一个很好的琏式调用，记录最后要用value来解包
+
+**不管怎么说，能少写一行代码 就少写一行代码**
+
+虽然原代码，多看一下也能理解，但是大量的更容易理解的代码与多看一眼能理解的代码，对人的影响就绝不是多看一眼的影响了。
