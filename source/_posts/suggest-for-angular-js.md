@@ -76,7 +76,7 @@ $scope.cancelVerify = function (contract) {
 };
 ```
 
-以下是纯js建议跟 angular关系不有
+以下是纯js建议跟 angular关系不大
 ### 将代码写到你不能再优化为止
 ```javascript
 $scope.changeTimeType = timeType => {
