@@ -106,7 +106,7 @@ compose(
 2. `map`将数据属性`amount`提取出来。
 3. `reduce`将所有的数据通过`myMath.add`救和，初始值设置为0。
 
-这三点在介绍`lodash`版本的时候说过了。这里再说一次的意图是`ramda`和`lodash`处理的思想是一置的。只是在写法上不同(`lodash/fp`也许也能这么写，所以`ramda`与`lodash`也许只有`api`设计的不同)
+这三点在介绍`lodash`版本的时候说过了。这里再说一次的意图是`ramda`和`lodash`处理的思想是一致的。只是在写法上不同(`lodash/fp`也许也能这么写，所以`ramda`与`lodash`也许只有`api`设计的不同)
 
 
 还有一个点`reduce(myMath.add，0)`,由于我知道`myMath.add`中没有使用`this`并且知道`reduce`会为迭代函数提供两个参数`acc`,`value`。我才敢这样做。为了更安全可以写成`reduce((acc,value) => myMath.add(acc,value)，0)`。这种提及了数据的写法很丑。但是让人感觉到安全，因为看到了数据的流向。所以在函数编程里面，尽量不要使用`this`。因为this本身就是为面向对象设计，`this`会让函数不纯。
