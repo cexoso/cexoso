@@ -141,6 +141,90 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-fp" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/cexoso/2017/08/17/fp/">下一篇fp介绍的素材</a>
+    </h1>
+  
+
+        
+        <a href="/cexoso/2017/08/17/fp/" class="archive-article-date">
+  	<time datetime="2017-08-17T01:57:16.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-17</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="素材1"><a href="#素材1" class="headerlink" title="素材1"></a>素材1</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">sumProductAmount2</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">products</span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> amount = <span class="number">0</span>;</div><div class="line">        $.each(products, <span class="function"><span class="keyword">function</span> (<span class="params">i, d</span>) </span>&#123;</div><div class="line">            <span class="keyword">if</span> (d.__type == <span class="string">'delete'</span>) &#123;</div><div class="line">                <span class="keyword">return</span>;</div><div class="line">            &#125;</div><div class="line">            amount = myMath.add(amount, d.amount);</div><div class="line">        &#125;);</div><div class="line">        <span class="keyword">return</span> amount;</div><div class="line">    &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>sumProductAmount2</code>函数内使用了<code>each</code>做为函数处理数组数据而不是使用<code>for</code>循环来处理。但是在整个实现上，还是延用了指令编程的思想。指明了一个数据要先判断是否是<code>delete</code>的数据,再去与迭代<code>amount</code>求和</p>
+<h1 id="lodash版本"><a href="#lodash版本" class="headerlink" title="lodash版本"></a>lodash版本</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">sumProductAmount2</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">products</span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> chain(products)</div><div class="line">            .reject([<span class="string">"__type"</span>, <span class="string">"delete"</span>])</div><div class="line">            .map(<span class="string">"amount"</span>)</div><div class="line">            .reduce(<span class="function">(<span class="params">acc, x</span>) =&gt;</span> myMath.add(acc, x), <span class="number">0</span>)</div><div class="line">            .value()</div><div class="line">    &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>lodash</code>版本使用<code>chain</code>将<code>products</code>打包，使用申明型语句表明了去掉<code>__type</code>属性等于<code>delete</code>的数据，再将数据根据属性<code>amount</code>印射，然后对所有的数据进行迭代<code>reduce((acc, x) =&gt; myMath.add(acc, x.amount), 0)</code>。最后取值<code>value()</code>,整体上已经很好了。这样的函数完全可以写成一个<code>lamda</code>表达式(如果不怕难看的话):<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> sumProductAmount2 = <span class="function"><span class="params">()</span> =&gt;</span> products =&gt; chain(products)</div><div class="line">    .reject([<span class="string">"__type"</span>, <span class="string">"delete"</span>])</div><div class="line">    .map(<span class="string">"amount"</span>)</div><div class="line">    .reduce(<span class="function">(<span class="params">acc, x</span>) =&gt;</span> myMath.add(acc, x), <span class="number">0</span>)</div><div class="line">    .value()</div></pre></td></tr></table></figure></p>
+<p>lodash版本有一些美中不足的是reduce函数虽然已经很fp风格了。但是在语义上并没有尽善尽美。如果有一个函数<code>.sumWith(myMath.add)</code>用以代替<code>.reduce((acc, x) =&gt; myMath.add(acc, x), 0)</code>的话。易读性就会变得非常的好。</p>
+<h1 id="ramda版本"><a href="#ramda版本" class="headerlink" title="ramda版本"></a>ramda版本</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> &#123; reduce, map, prop, reject, propEq, compose &#125; <span class="keyword">from</span> <span class="string">'ramda'</span></div><div class="line"><span class="keyword">const</span> sumProductAmount2 = <span class="function"><span class="params">()</span> =&gt;</span> compose(</div><div class="line">        reduce(myMath.add，<span class="number">0</span>), </div><div class="line">        map(prop(<span class="string">"amount"</span>)), </div><div class="line">        reject(propEq(<span class="string">"__type"</span>, <span class="string">"delete"</span>))</div><div class="line">)</div></pre></td></tr></table></figure>
+<p><code>ramda</code>库没有语法糖，没有魔法银弹。看看<code>lodash</code>版本的<code>reject</code>。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> users = [</div><div class="line">  &#123; <span class="string">'user'</span>: <span class="string">'barney'</span>, <span class="string">'age'</span>: <span class="number">36</span>, <span class="string">'active'</span>: <span class="literal">false</span> &#125;,</div><div class="line">  &#123; <span class="string">'user'</span>: <span class="string">'fred'</span>,   <span class="string">'age'</span>: <span class="number">40</span>, <span class="string">'active'</span>: <span class="literal">true</span> &#125;</div><div class="line">];</div><div class="line"> </div><div class="line">_.reject(users, <span class="function"><span class="keyword">function</span>(<span class="params">o</span>) </span>&#123; <span class="keyword">return</span> !o.active; &#125;);</div><div class="line"><span class="comment">// =&gt; objects for ['fred']</span></div><div class="line"> </div><div class="line"><span class="comment">// The `_.matches` iteratee shorthand.</span></div><div class="line">_.reject(users, &#123; <span class="string">'age'</span>: <span class="number">40</span>, <span class="string">'active'</span>: <span class="literal">true</span> &#125;);</div><div class="line"><span class="comment">// =&gt; objects for ['barney']</span></div><div class="line"> </div><div class="line"><span class="comment">// The `_.matchesProperty` iteratee shorthand.</span></div><div class="line">_.reject(users, [<span class="string">'active'</span>, <span class="literal">false</span>]);</div><div class="line"><span class="comment">// =&gt; objects for ['fred']</span></div><div class="line"> </div><div class="line"><span class="comment">// The `_.property` iteratee shorthand.</span></div><div class="line">_.reject(users, <span class="string">'active'</span>);</div><div class="line"><span class="comment">// =&gt; objects for ['barney']</span></div></pre></td></tr></table></figure></p>
+<p>这个怪异的签名意思是</p>
+<ol>
+<li>可以传递一个函数，当返回值为true时reject此数据。</li>
+<li>可以传递一个对象，会使用<code>_.matche</code>函数调用些对象返回一个函数，之后情况参照示例1.</li>
+<li>可以传递一个元组(其实就是长度为2的数组)，会使用<code>_.matchesProperty</code>调用返回一个函数，之后参数示例1.</li>
+<li>传递一个字符串，应用<code>_.property</code></li>
+</ol>
+<p>换言之：</p>
+<ul>
+<li><code>_.reject(users, function(o) { return !o.active; });</code>这种写法是最被提供的。</li>
+<li><code>_.reject(users, { &#39;age&#39;: 40, &#39;active&#39;: true });</code>写法是<code>_.reject(users, _matches({ &#39;age&#39;: 40, &#39;active&#39;: true }));</code>的语法糖。</li>
+<li><code>_.reject(users, [&#39;active&#39;, false]);</code>是<code>_.reject(users, _.matchesProperty(&#39;active&#39;, false));</code>的语法糖</li>
+<li><code>_.reject(users, &#39;active&#39;);</code>是<code>_.reject(users, _.property(&#39;active&#39;));</code>的语法糖</li>
+</ul>
+<p>并且这种调用形式在lodash里面被广泛使用。熟悉这种语法糖的小朋友会感觉非常的甜。而不熟悉的人会感觉代码怪异难懂。</p>
+<p><code>ramda</code>函数库并没有类型的语法糖。要想表达属性<code>__type</code>等于<code>delete</code>必须乖乖使用<code>propEq(&quot;__type&quot;, &quot;delete&quot;)</code>，没有这种形式<code>[&quot;__type&quot;, &quot;delete&quot;]</code></p>
+<p>下面介绍一下<code>ramda</code>与<code>lodash</code>的不同。ramda更容易写出<code>pointfree</code>的代码(也许<code>lodash/fp</code>也提供了类似方法)。</p>
+<p>在示例中 函数<code>sumProductAmount2</code>只是为了返回一个函数对数据源<code>products</code>做处理。<br>ramda版本的函数并没有提及这个数据源<code>products</code>，它只是表明了一个函数该做的事。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">compose(</div><div class="line">    reduce(myMath.add，<span class="number">0</span>), </div><div class="line">    map(prop(<span class="string">"amount"</span>)), </div><div class="line">    reject(propEq(<span class="string">"__type"</span>, <span class="string">"delete"</span>))</div><div class="line">)</div></pre></td></tr></table></figure></p>
+<p>使用组合的方式组合三个匿名函数。（注意顺序是从右到左从下到上）</p>
+<ol>
+<li><code>reject(propEq(&quot;__type&quot;, &quot;delete&quot;))</code>过滤掉了所有<code>__type</code>属性为<code>delete</code>数据</li>
+<li><code>map</code>将数据属性<code>amount</code>提取出来。</li>
+<li><code>reduce</code>将所有的数据通过<code>myMath.add</code>救和，初始值设置为0。</li>
+</ol>
+<p>这三点在介绍<code>lodash</code>版本的时候说过了。这里再说一次的意图是<code>ramda</code>和<code>lodash</code>处理的思想是一置的。只是在写法上不同(<code>lodash/fp</code>也许也能这么写，所以<code>ramda</code>与<code>lodash</code>也许只有<code>api</code>设计的不同)<br></p>
+<p>还有一个点<code>reduce(myMath.add，0)</code>,由于我知道<code>myMath.add</code>中没有使用<code>this</code>并且知道<code>reduce</code>会为迭代函数提供两个参数<code>acc</code>,<code>value</code>。我才敢这样做。为了更安全可以写成<code>reduce((acc,value) =&gt; myMath.add(acc,value)，0)</code>。这种提及了数据的写法很丑。但是让人感觉到安全，因为看到了数据的流向。所以在函数编程里面，尽量不要使用<code>this</code>。因为this本身就是为面向对象设计，<code>this</code>会让函数不纯。</p>
+<p>看不到数据的流向会让人调试很麻烦。除了使用<code>tdd</code>开发方式外。还可以通过帮助函数进行调试。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> helper = <span class="function"><span class="params">data</span> =&gt;</span> &#123;</div><div class="line">    <span class="built_in">console</span>.log(data); <span class="comment">//break here；</span></div><div class="line">    <span class="keyword">return</span> data;</div><div class="line">&#125;</div><div class="line">compose(</div><div class="line">    reduce(myMath.add，<span class="number">0</span>), </div><div class="line">    helper,</div><div class="line">    map(prop(<span class="string">"amount"</span>)), </div><div class="line">    reject(propEq(<span class="string">"__type"</span>, <span class="string">"delete"</span>))</div><div class="line">)</div></pre></td></tr></table></figure></p>
+<p><code>helper</code>不会影响到正常的流程，只是会提供了一个看见数据的机会。</p>
+<p>之前我们提到过<code>reduce(myMath.add，0)</code>形式没有<code>sumWith</code>更语义化，在<code>lodash</code>版本里面我们没法改，但是<code>ramda</code>版本我们是可以替换的。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> sumWith = <span class="function"><span class="params">fn</span> =&gt;</span> reduce(fn，<span class="number">0</span>);</div><div class="line"></div><div class="line">compose(</div><div class="line">    sumWith(myMath.add), </div><div class="line">    map(prop(<span class="string">"amount"</span>)), </div><div class="line">    reject(propEq(<span class="string">"__type"</span>, <span class="string">"delete"</span>))</div><div class="line">)</div></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/cexoso/2017/08/17/fp/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+  
     <article id="post-suggest-for-angular-js" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -576,11 +660,11 @@
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">recompose</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">lodash</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">lodash</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">recompose</a>
         		</li>
       		
 		</ul>
@@ -731,61 +815,6 @@
 
 
   
-    <article id="post-quickStartWork" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/cexoso/2017/05/20/quickStartWork/">nodeJs快速启动前端开发环境</a>
-    </h1>
-  
-
-        
-        <a href="/cexoso/2017/05/20/quickStartWork/" class="archive-article-date">
-  	<time datetime="2017-05-20T09:23:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-05-20</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="每次天上班。都进行着这一系列活动。"><a href="#每次天上班。都进行着这一系列活动。" class="headerlink" title="每次天上班。都进行着这一系列活动。"></a>每次天上班。都进行着这一系列活动。</h3><ul>
-<li>切到工作目录运行开发环境。 </li>
-<li>打开编辑器</li>
-<li>打开浏览器，进入到某页面</li>
-</ul>
-<h3 id="接着就可以去打水了"><a href="#接着就可以去打水了" class="headerlink" title="接着就可以去打水了"></a>接着就可以去打水了</h3><p>今天想着能不能自动化这些操作。于是自己用node来写了一段程序。理论上来说更应该用bash来写的。可惜自己不是很懂bash。 代码如下:</p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> shell = <span class="built_in">require</span>(<span class="string">"shelljs"</span>)</div><div class="line"><span class="keyword">var</span> opn = <span class="built_in">require</span>(<span class="string">"opn"</span>)</div><div class="line"><span class="keyword">const</span> &#123; exec, cd &#125; = shell</div><div class="line"><span class="keyword">const</span> workspace = <span class="string">"D:\\git\\yunke_frontend"</span>;</div><div class="line">cd(workspace)</div><div class="line">exec(<span class="string">`code <span class="subst">$&#123;workspace&#125;</span>`</span>)<span class="comment">//用vscode打开工作 目录的文件</span></div><div class="line">exec(<span class="string">`npm start -- run my dev server`</span>, &#123; <span class="attr">async</span>: <span class="literal">true</span> &#125;)</div><div class="line">setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">    opn(<span class="string">'http://theUrlToMyWorkerSpace.com/xx'</span>, &#123; <span class="attr">app</span>: <span class="string">'chrome'</span> &#125;);</div><div class="line">&#125;, <span class="number">15000</span>) <span class="comment">//延时15秒 等编译完成再打开浏览器</span></div></pre></td></tr></table></figure>
-<p>主要用到了 <a href="https://github.com/shelljs/shelljs" target="_blank" rel="external"><em>shelljs</em></a> 和 <a href="https://github.com/sindresorhus/opn" target="_blank" rel="external"><em>opn</em></a></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/cexoso/2017/05/20/quickStartWork/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/cexoso/page/2/">2</a><a class="extend next" rel="next" href="/cexoso/page/2/">Next &raquo;</a>
@@ -874,6 +903,38 @@ return o(t,i(n),arguments.length<3?void 0:u(arguments[2]))}})},function(t,n,r){v
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">react</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">复杂组件</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">components</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">customize</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">update</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">lodash</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">recompose</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">重构</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">tdd</a>
               </li>
              
@@ -887,38 +948,6 @@ return o(t,i(n),arguments.length<3?void 0:u(arguments[2]))}})},function(t,n,r){v
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">规范</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">react</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">复杂组件</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">components</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">重构</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">recompose</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">lodash</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">customize</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">update</a>
               </li>
              
               <li class="article-tag-list-item">
