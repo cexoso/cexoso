@@ -137,3 +137,73 @@ compose(
     reject(propEq("__type", "delete"))
 )
 ```
+# don't repeat yourself *（dry）*
+```javascript
+// myMath.add是一个避免浮点数加法精度问题的加法函数函数
+// $ 是 jquery(众所周知)
+filter('countSMS2', function () {
+    return function (products) {
+        var num = 0;
+        $.each(products, function (i, d) {
+            if (d.__type == 'delete') {
+                return;
+            }
+            num = myMath.add(num, d.authorization_type == 1 ? d.authorization_numeric : 0);
+        });
+        return num;
+    };
+})
+filter('countProject2', function () {
+    return function (products) {
+        var num = 0;
+        $.each(products, function (i, d) {
+            if (d.__type == 'delete') {
+                return;
+            }
+            num = myMath.add(num, d.authorization_type == 0 ? d.authorization_numeric : 0);
+        });
+        return num;
+    };
+})
+```
+上文定义了两个过滤器。代码几乎一模一样，一个统计authorization_type 为 1的 一个统计authorization_type 为 0的。
+
+上述代码违背了`dry`，
+> 原作者内心：我没有重复编码，第二段是我`CV`的。
+
+先用`lodash`重构一下:
+```javascript
+filter('countSMS2', function () {
+    return function (products) {
+        return chain(products)
+            .reject(["__type", "delete"])
+            .map(({ authorization_type: at, authorization_numeric: an }) => +at === 1 ? an : 0)
+            .reduce((acc, x) => myMath.add(acc, x), 0)
+            .value()
+    };
+})
+filter('countProject2', function () {
+    return function (products) {
+        return chain(products)
+            .reject(["__type", "delete"])
+            .map(({ authorization_type: at, authorization_numeric: an }) => +at === 0 ? an : 0)
+            .reduce((acc, x) => myMath.add(acc, x), 0)
+            .value()
+    };
+})
+```
+接着把公共的部分提出去
+```javascript
+const sumByType = type => products => chain(products)
+    .reject(["__type", "delete"])
+    .map(({ authorization_type: at, authorization_numeric: an }) => +at === type ? an : 0)
+    .reduce((acc, x) => myMath.add(acc, x), 0)
+    .value()
+filter('countSMS2', () => sumByType(0));
+filter('countProject2', () => sumByType(1))
+```
+全`lamda`函数写，看起来就很爽
+
+这里用到的就是`curry`化。`sumByType`函数是`curried function`。部分调用后产生偏函数(`partial`)。解决了重复的问题。当然这个sumByType也叫高阶函数(`HOF`)。
+
+不再提供ramda版本示例
