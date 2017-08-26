@@ -25,7 +25,7 @@ CREATE TABLE Persons
 创建一张表。
 
 `表达式（expression）`表达的是要什么，而不是怎么去做。
-
+<!-- more -->
 ## 一些简单的`javascrip`示例
 ```javascript
 // 示例1 求和
