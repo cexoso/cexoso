@@ -6,14 +6,18 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="//cexoso.github.io">
-  <title>Archives | 暧月的猫</title>
+  <title>为什么我们可以用函数编程 | 暧月的猫</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="暧月的猫">
-<meta property="og:url" content="//cexoso.github.io/archives/page/2/index.html">
+  <meta name="description" content="表达式一个常见的表达式：sql，例如：1SELECT * FROM student; 从student表中获取所有的数据。 12345678CREATE TABLE Persons(    PersonID int,    LastName varchar(255),    FirstName varchar(255),    Address varchar(255),    City var">
+<meta property="og:type" content="article">
+<meta property="og:title" content="为什么我们可以用函数编程">
+<meta property="og:url" content="//cexoso.github.io/2017/08/26/fp-in-js/index.html">
 <meta property="og:site_name" content="暧月的猫">
+<meta property="og:description" content="表达式一个常见的表达式：sql，例如：1SELECT * FROM student; 从student表中获取所有的数据。 12345678CREATE TABLE Persons(    PersonID int,    LastName varchar(255),    FirstName varchar(255),    Address varchar(255),    City var">
+<meta property="og:updated_time" content="2017-08-26T08:59:11.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="暧月的猫">
+<meta name="twitter:title" content="为什么我们可以用函数编程">
+<meta name="twitter:description" content="表达式一个常见的表达式：sql，例如：1SELECT * FROM student; 从student表中获取所有的数据。 12345678CREATE TABLE Persons(    PersonID int,    LastName varchar(255),    FirstName varchar(255),    Address varchar(255),    City var">
   
     <link rel="alternative" href="/atom.xml" title="暧月的猫" type="application/atom+xml">
   
@@ -139,90 +143,186 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-fp-in-js" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/cexoso/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/cexoso/2017/05/20/quickStartWork/" class="archive-article-date">
-  	<time datetime="2017-05-20T09:23:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-05-20</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/cexoso/2017/05/20/quickStartWork/">nodeJs快速启动前端开发环境</a>
+    <h1 class="article-title" itemprop="name">
+      为什么我们可以用函数编程
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/cexoso/2017/05/13/TDD/" class="archive-article-date">
-  	<time datetime="2017-05-13T03:03:20.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-05-13</time>
+        
+        <a href="/cexoso/2017/08/26/fp-in-js/" class="archive-article-date">
+  	<time datetime="2017-08-26T02:05:39.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-26</time>
 </a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="表达式"><a href="#表达式" class="headerlink" title="表达式"></a>表达式</h1><p>一个常见的表达式：<code>sql</code>，例如：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> student;</div></pre></td></tr></table></figure></p>
+<p>从<code>student</code>表中获取所有的数据。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> Persons</div><div class="line">(</div><div class="line">    PersonID <span class="built_in">int</span>,</div><div class="line">    LastName <span class="built_in">varchar</span>(<span class="number">255</span>),</div><div class="line">    FirstName <span class="built_in">varchar</span>(<span class="number">255</span>),</div><div class="line">    Address <span class="built_in">varchar</span>(<span class="number">255</span>),</div><div class="line">    City <span class="built_in">varchar</span>(<span class="number">255</span>)</div><div class="line">);</div></pre></td></tr></table></figure>
+<p>创建一张表。</p>
+<p><code>表达式（expression）</code>表达的是要什么，而不是怎么去做。<br><a id="more"></a></p>
+<h2 id="一些简单的javascrip示例"><a href="#一些简单的javascrip示例" class="headerlink" title="一些简单的javascrip示例"></a>一些简单的<code>javascrip</code>示例</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 示例1 求和</span></div><div class="line"><span class="keyword">const</span> nums = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>]</div><div class="line"><span class="keyword">const</span> total = <span class="number">0</span>;</div><div class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; nums.length; i++) &#123;</div><div class="line">    total += nums[i]</div><div class="line">&#125;</div><div class="line"><span class="comment">// 示例2 获取所有及格学生</span></div><div class="line"><span class="keyword">const</span> allStudent = [&#123;<span class="attr">score</span>: <span class="number">59</span>, <span class="attr">name</span>: <span class="string">"xiaowang"</span>&#125;,&#123;<span class="attr">score</span>: <span class="number">60</span>, <span class="attr">name</span>: <span class="string">"xiaohong"</span>&#125;];</div><div class="line"><span class="keyword">const</span> passStudent = []</div><div class="line"><span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i&lt; allStudent.length; i++) &#123;</div><div class="line">    <span class="keyword">const</span> student = allStudent[i]</div><div class="line">    <span class="keyword">if</span> (student.score &gt; <span class="number">60</span>) &#123;</div><div class="line">        passStudent.push(student)</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>表达式形式<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 示例1 求和</span></div><div class="line"><span class="keyword">const</span> nums = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>]</div><div class="line"><span class="keyword">const</span> total = sum(nums)</div><div class="line"><span class="comment">// 示例2 获取所有及格的学生</span></div><div class="line"><span class="keyword">const</span> allStudent = [&#123;<span class="attr">score</span>: <span class="number">59</span>, <span class="attr">name</span>: <span class="string">"xiaowang"</span>&#125;,&#123;<span class="attr">score</span>: <span class="number">60</span>, <span class="attr">name</span>: <span class="string">"xiaohong"</span>&#125;];</div><div class="line"><span class="keyword">const</span> passStudent = filter(allStudent, (&#123;score&#125;) =&gt; score &gt; <span class="number">60</span>)</div><div class="line"><span class="comment">//或者 </span></div><div class="line"><span class="keyword">const</span> passStudent = filterAllPass(allStudent)</div></pre></td></tr></table></figure></p>
+<p>示例中并没有说<code>sum</code>和<code>filter</code>或者<code>filterAllPass</code>是哪里来的。这里只是想表达一下表达式的简洁。然而简单的封装一下<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> filterAllPass = <span class="function">(<span class="params">allStudent</span>) =&gt;</span> &#123;</div><div class="line">    <span class="keyword">const</span> passStudent = []</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i&lt; allStudent.length; i++) &#123;</div><div class="line">        <span class="keyword">const</span> student = allStudent[i]</div><div class="line">        <span class="keyword">if</span> (student.score &gt; <span class="number">60</span>) &#123;</div><div class="line">            passStudent.push(student)</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> passStudent;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>就可以把指令式的封装成了函数式的表达式，难道函数式是指令式的多此一举吗?</p>
+<h1 id="组合"><a href="#组合" class="headerlink" title="组合"></a>组合</h1><p><br>函数式绝不是指令式的多此一举。如果真的需要<code>filterAllPass</code>函数。函数式编程也会有自己的一套解决方法<code>组合</code>.简单的说<code>filterAllPass</code>就是<code>遍历</code>(这里是<code>filter</code>不是<code>map</code>)、<code>取属性</code>、<code>判断大小</code>组合起来的。如果</p>
+<ul>
+<li>遍历 -&gt; filter</li>
+<li>取属性 -&gt; props</li>
+<li>判断大小 -&gt; gt</li>
+<li>组合 -&gt; .</li>
+</ul>
+<p>那么 <code>const filterAllPass = filter(compose(gt(60), props(&quot;score&quot;)))</code> </p>
+<p>遗憾的是javascript不可以自定义操作符，也没有<code>.</code>操作符来代替<code>compose</code>，所以javascript的代码看起来总是会比较长。</p>
+<p><code>haskell</code>版本:<code>filterAllPass = filter $ (&gt; 60) . (props &quot;score&quot;)</code></p>
+<h1 id="兼容性"><a href="#兼容性" class="headerlink" title="兼容性"></a>兼容性</h1><h2 id="monad"><a href="#monad" class="headerlink" title="monad"></a>monad</h2><p>实现了<code>map</code>函数的数据结构就是<code>monad</code>。例如<code>Number.of(1).map(+2).map(*3)</code> =&gt; <code>Number.of(9)</code>,此时的<code>Number</code>就是一个<code>monad</code>。不严格的说。<code>Promise</code>就是monad。Promise提供了<code>then</code>函数返回新的Promise，就像Monad提供map函数返回新的Monad一样。</p>
+<h2 id="Maybe"><a href="#Maybe" class="headerlink" title="Maybe"></a>Maybe</h2><p><code>Maybe</code>是一个Monad，它能在有值(<code>Just</code>)的时候进行map没值(<code>Nothing</code>)的时候啥都不干。例如：<code>Maybe.of(just 3).map(+3).map(*3)=&gt;Just 18</code>。<code>Maybe.of(Nothing).map(+3).map(*3)=&gt;Nothing</code>。</p>
+<h2 id="一些优秀的js库"><a href="#一些优秀的js库" class="headerlink" title="一些优秀的js库"></a>一些优秀的<code>js</code>库</h2><p>如果你有考虑过函数<code>const filterAllPass = filter(compose(gt(60), props(&quot;score&quot;)))</code>在接收异常的参数的时候会怎么样时，已经有一些优秀的库考虑了。<br>比如<code>lodash</code>的<code>filter</code>，在你调用的时候无论如何都会返回一个数组给你。即使你用undefined做为参数得到的也是数组。还有<code>ramda</code>的<code>props</code>函数，总是会返回你想取的属性的值，不管这个属性存在不存在。也不管你想操作的对象是不是undefined。这种特性很像Maybe的特性，有值就会处理，没有值就不去处理。反正不会因为边界情况而中断。</p>
+<h1 id="实际项目中的一些例子及lodash、ramda的简介"><a href="#实际项目中的一些例子及lodash、ramda的简介" class="headerlink" title="实际项目中的一些例子及lodash、ramda的简介"></a>实际项目中的一些例子及lodash、ramda的简介</h1><h2 id="素材1"><a href="#素材1" class="headerlink" title="素材1"></a>素材1</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">sumProductAmount2</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">products</span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> amount = <span class="number">0</span>;</div><div class="line">        $.each(products, <span class="function"><span class="keyword">function</span> (<span class="params">i, d</span>) </span>&#123;</div><div class="line">            <span class="keyword">if</span> (d.__type == <span class="string">'delete'</span>) &#123;</div><div class="line">                <span class="keyword">return</span>;</div><div class="line">            &#125;</div><div class="line">            amount = myMath.add(amount, d.amount);</div><div class="line">        &#125;);</div><div class="line">        <span class="keyword">return</span> amount;</div><div class="line">    &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>sumProductAmount2</code>函数内使用了<code>each</code>做为函数处理数组数据而不是使用<code>for</code>循环来处理。但是在整个实现上，还是延用了指令编程的思想。指明了一个数据要先判断是否是<code>delete</code>的数据,再去与迭代<code>amount</code>求和</p>
+<h3 id="lodash版本"><a href="#lodash版本" class="headerlink" title="lodash版本"></a>lodash版本</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">sumProductAmount2</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">products</span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> chain(products)</div><div class="line">            .reject([<span class="string">"__type"</span>, <span class="string">"delete"</span>])</div><div class="line">            .map(<span class="string">"amount"</span>)</div><div class="line">            .reduce(<span class="function">(<span class="params">acc, x</span>) =&gt;</span> myMath.add(acc, x), <span class="number">0</span>)</div><div class="line">            .value()</div><div class="line">    &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>lodash</code>版本使用<code>chain</code>将<code>products</code>打包，使用申明型语句表明了去掉<code>__type</code>属性等于<code>delete</code>的数据，再将数据根据属性<code>amount</code>印射，然后对所有的数据进行迭代<code>reduce((acc, x) =&gt; myMath.add(acc, x.amount), 0)</code>。最后取值<code>value()</code>,整体上已经很好了。这样的函数完全可以写成一个<code>lamda</code>表达式(如果不怕难看的话):<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> sumProductAmount2 = <span class="function"><span class="params">()</span> =&gt;</span> products =&gt; chain(products)</div><div class="line">    .reject([<span class="string">"__type"</span>, <span class="string">"delete"</span>])</div><div class="line">    .map(<span class="string">"amount"</span>)</div><div class="line">    .reduce(<span class="function">(<span class="params">acc, x</span>) =&gt;</span> myMath.add(acc, x), <span class="number">0</span>)</div><div class="line">    .value()</div></pre></td></tr></table></figure></p>
+<p>lodash版本有一些美中不足的是reduce函数虽然已经很fp风格了。但是在语义上并没有尽善尽美。如果有一个函数<code>.sumWith(myMath.add)</code>用以代替<code>.reduce((acc, x) =&gt; myMath.add(acc, x), 0)</code>的话。易读性就会变得非常的好。</p>
+<h3 id="ramda版本"><a href="#ramda版本" class="headerlink" title="ramda版本"></a>ramda版本</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> &#123; reduce, map, prop, reject, propEq, compose &#125; <span class="keyword">from</span> <span class="string">'ramda'</span></div><div class="line"><span class="keyword">const</span> sumProductAmount2 = <span class="function"><span class="params">()</span> =&gt;</span> compose(</div><div class="line">        reduce(myMath.add，<span class="number">0</span>), </div><div class="line">        map(prop(<span class="string">"amount"</span>)), </div><div class="line">        reject(propEq(<span class="string">"__type"</span>, <span class="string">"delete"</span>))</div><div class="line">)</div></pre></td></tr></table></figure>
+<p><code>ramda</code>库没有语法糖，没有魔法银弹。看看<code>lodash</code>版本的<code>reject</code>。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> users = [</div><div class="line">  &#123; <span class="string">'user'</span>: <span class="string">'barney'</span>, <span class="string">'age'</span>: <span class="number">36</span>, <span class="string">'active'</span>: <span class="literal">false</span> &#125;,</div><div class="line">  &#123; <span class="string">'user'</span>: <span class="string">'fred'</span>,   <span class="string">'age'</span>: <span class="number">40</span>, <span class="string">'active'</span>: <span class="literal">true</span> &#125;</div><div class="line">];</div><div class="line"> </div><div class="line">_.reject(users, <span class="function"><span class="keyword">function</span>(<span class="params">o</span>) </span>&#123; <span class="keyword">return</span> !o.active; &#125;);</div><div class="line"><span class="comment">// =&gt; objects for ['fred']</span></div><div class="line"> </div><div class="line"><span class="comment">// The `_.matches` iteratee shorthand.</span></div><div class="line">_.reject(users, &#123; <span class="string">'age'</span>: <span class="number">40</span>, <span class="string">'active'</span>: <span class="literal">true</span> &#125;);</div><div class="line"><span class="comment">// =&gt; objects for ['barney']</span></div><div class="line"> </div><div class="line"><span class="comment">// The `_.matchesProperty` iteratee shorthand.</span></div><div class="line">_.reject(users, [<span class="string">'active'</span>, <span class="literal">false</span>]);</div><div class="line"><span class="comment">// =&gt; objects for ['fred']</span></div><div class="line"> </div><div class="line"><span class="comment">// The `_.property` iteratee shorthand.</span></div><div class="line">_.reject(users, <span class="string">'active'</span>);</div><div class="line"><span class="comment">// =&gt; objects for ['barney']</span></div></pre></td></tr></table></figure></p>
+<p>这个怪异的签名意思是</p>
+<ol>
+<li>可以传递一个函数，当返回值为true时reject此数据。</li>
+<li>可以传递一个对象，会使用<code>_.matche</code>函数调用些对象返回一个函数，之后情况参照示例1.</li>
+<li>可以传递一个元组(其实就是长度为2的数组)，会使用<code>_.matchesProperty</code>调用返回一个函数，之后参数示例1.</li>
+<li>传递一个字符串，应用<code>_.property</code></li>
+</ol>
+<p>换言之：</p>
+<ul>
+<li><code>_.reject(users, function(o) { return !o.active; });</code>这种写法是最初始提供的。</li>
+<li><code>_.reject(users, { &#39;age&#39;: 40, &#39;active&#39;: true });</code>写法是<code>_.reject(users, _matches({ &#39;age&#39;: 40, &#39;active&#39;: true }));</code>的语法糖。</li>
+<li><code>_.reject(users, [&#39;active&#39;, false]);</code>是<code>_.reject(users, _.matchesProperty(&#39;active&#39;, false));</code>的语法糖</li>
+<li><code>_.reject(users, &#39;active&#39;);</code>是<code>_.reject(users, _.property(&#39;active&#39;));</code>的语法糖</li>
+</ul>
+<p>并且这种调用形式在lodash里面被广泛使用。熟悉这种语法糖会感觉非常的方便。而不熟悉的人会感觉代码怪异难懂。</p>
+<p><code>ramda</code>函数库并没有类型的语法糖。要想表达属性<code>__type</code>等于<code>delete</code>必须乖乖使用<code>propEq(&quot;__type&quot;, &quot;delete&quot;)</code>，没有这种形式<code>[&quot;__type&quot;, &quot;delete&quot;]</code></p>
+<p>下面介绍一下<code>ramda</code>与<code>lodash</code>的不同。ramda更容易写出<code>pointfree</code>的代码(也许<code>lodash/fp</code>也提供了类似方法)。</p>
+<p>在示例中 函数<code>sumProductAmount2</code>只是为了返回一个函数对数据源<code>products</code>做处理。<br>ramda版本的函数并没有提及这个数据源<code>products</code>，它只是表明了一个函数该做的事。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">compose(</div><div class="line">    reduce(myMath.add，<span class="number">0</span>), </div><div class="line">    map(prop(<span class="string">"amount"</span>)), </div><div class="line">    reject(propEq(<span class="string">"__type"</span>, <span class="string">"delete"</span>))</div><div class="line">)</div></pre></td></tr></table></figure></p>
+<p>使用组合的方式组合三个匿名函数。（注意顺序是从右到左从下到上）</p>
+<ol>
+<li><code>reject(propEq(&quot;__type&quot;, &quot;delete&quot;))</code>过滤掉了所有<code>__type</code>属性为<code>delete</code>数据</li>
+<li><code>map</code>将数据属性<code>amount</code>提取出来。</li>
+<li><code>reduce</code>将所有的数据通过<code>myMath.add</code>救和，初始值设置为0。</li>
+</ol>
+<p>这三点在介绍<code>lodash</code>版本的时候说过了。这里再说一次的意图是<code>ramda</code>和<code>lodash</code>处理的思想是一致的。只是在写法上不同(<code>lodash/fp</code>也许也能这么写，所以<code>ramda</code>与<code>lodash</code>也许只有<code>api</code>设计的不同)<br></p>
+<p>还有一个点<code>reduce(myMath.add，0)</code>,由于我知道<code>myMath.add</code>中没有使用<code>this</code>并且知道<code>reduce</code>会为迭代函数提供两个参数<code>acc</code>,<code>value</code>。我才敢这样做。为了更安全可以写成<code>reduce((acc,value) =&gt; myMath.add(acc,value)，0)</code>。这种提及了数据的写法很丑。但是让人感觉到安全，因为看到了数据的流向。所以在函数编程里面，尽量不要使用<code>this</code>。因为this本身就是为面向对象设计，<code>this</code>会让函数不纯。</p>
+<p>看不到数据的流向会让人调试很麻烦。除了使用<code>tdd</code>开发方式外。还可以通过帮助函数进行调试。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> helper = <span class="function"><span class="params">data</span> =&gt;</span> &#123;</div><div class="line">    <span class="built_in">console</span>.log(data); <span class="comment">//break here；</span></div><div class="line">    <span class="keyword">return</span> data;</div><div class="line">&#125;</div><div class="line">compose(</div><div class="line">    reduce(myMath.add，<span class="number">0</span>), </div><div class="line">    helper,</div><div class="line">    map(prop(<span class="string">"amount"</span>)), </div><div class="line">    reject(propEq(<span class="string">"__type"</span>, <span class="string">"delete"</span>))</div><div class="line">)</div></pre></td></tr></table></figure></p>
+<p><code>helper</code>不会影响到正常的流程，只是会提供了一个看见数据的机会。</p>
+<p>之前我们提到过<code>reduce(myMath.add，0)</code>形式没有<code>sumWith</code>更语义化，在<code>lodash</code>版本里面我们没法改，但是<code>ramda</code>版本我们是可以替换的。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> sumWith = <span class="function"><span class="params">fn</span> =&gt;</span> reduce(fn，<span class="number">0</span>);</div><div class="line"></div><div class="line">compose(</div><div class="line">    sumWith(myMath.add), </div><div class="line">    map(prop(<span class="string">"amount"</span>)), </div><div class="line">    reject(propEq(<span class="string">"__type"</span>, <span class="string">"delete"</span>))</div><div class="line">)</div></pre></td></tr></table></figure>
+<h1 id="don’t-repeat-yourself-（dry）"><a href="#don’t-repeat-yourself-（dry）" class="headerlink" title="don’t repeat yourself （dry）"></a>don’t repeat yourself <em>（dry）</em></h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// myMath.add是一个避免浮点数加法精度问题的加法函数函数</span></div><div class="line"><span class="comment">// $ 是 jquery(众所周知)</span></div><div class="line">filter(<span class="string">'countSMS2'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">products</span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> num = <span class="number">0</span>;</div><div class="line">        $.each(products, <span class="function"><span class="keyword">function</span> (<span class="params">i, d</span>) </span>&#123;</div><div class="line">            <span class="keyword">if</span> (d.__type == <span class="string">'delete'</span>) &#123;</div><div class="line">                <span class="keyword">return</span>;</div><div class="line">            &#125;</div><div class="line">            num = myMath.add(num, d.authorization_type == <span class="number">1</span> ? d.authorization_numeric : <span class="number">0</span>);</div><div class="line">        &#125;);</div><div class="line">        <span class="keyword">return</span> num;</div><div class="line">    &#125;;</div><div class="line">&#125;)</div><div class="line">filter(<span class="string">'countProject2'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">products</span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> num = <span class="number">0</span>;</div><div class="line">        $.each(products, <span class="function"><span class="keyword">function</span> (<span class="params">i, d</span>) </span>&#123;</div><div class="line">            <span class="keyword">if</span> (d.__type == <span class="string">'delete'</span>) &#123;</div><div class="line">                <span class="keyword">return</span>;</div><div class="line">            &#125;</div><div class="line">            num = myMath.add(num, d.authorization_type == <span class="number">0</span> ? d.authorization_numeric : <span class="number">0</span>);</div><div class="line">        &#125;);</div><div class="line">        <span class="keyword">return</span> num;</div><div class="line">    &#125;;</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<p>上文定义了两个过滤器。代码几乎一模一样，一个统计authorization_type 为 1的 一个统计authorization_type 为 0的。</p>
+<p>上述代码违背了<code>dry</code>，</p>
+<blockquote>
+<p>原作者内心：我没有重复编码，第二段是我<code>CV</code>的。</p>
+</blockquote>
+<p>先用<code>lodash</code>重构一下:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">filter(<span class="string">'countSMS2'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">products</span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> chain(products)</div><div class="line">            .reject([<span class="string">"__type"</span>, <span class="string">"delete"</span>])</div><div class="line">            .map(<span class="function">(<span class="params">&#123; authorization_type: at, authorization_numeric: an &#125;</span>) =&gt;</span> +at === <span class="number">1</span> ? an : <span class="number">0</span>)</div><div class="line">            .reduce(<span class="function">(<span class="params">acc, x</span>) =&gt;</span> myMath.add(acc, x), <span class="number">0</span>)</div><div class="line">            .value()</div><div class="line">    &#125;;</div><div class="line">&#125;)</div><div class="line">filter(<span class="string">'countProject2'</span>, <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> (<span class="params">products</span>) </span>&#123;</div><div class="line">        <span class="keyword">return</span> chain(products)</div><div class="line">            .reject([<span class="string">"__type"</span>, <span class="string">"delete"</span>])</div><div class="line">            .map(<span class="function">(<span class="params">&#123; authorization_type: at, authorization_numeric: an &#125;</span>) =&gt;</span> +at === <span class="number">0</span> ? an : <span class="number">0</span>)</div><div class="line">            .reduce(<span class="function">(<span class="params">acc, x</span>) =&gt;</span> myMath.add(acc, x), <span class="number">0</span>)</div><div class="line">            .value()</div><div class="line">    &#125;;</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<p>接着把公共的部分提出去<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> sumByType = <span class="function"><span class="params">type</span> =&gt;</span> products =&gt; chain(products)</div><div class="line">    .reject([<span class="string">"__type"</span>, <span class="string">"delete"</span>])</div><div class="line">    .map(<span class="function">(<span class="params">&#123; authorization_type: at, authorization_numeric: an &#125;</span>) =&gt;</span> +at === type ? an : <span class="number">0</span>)</div><div class="line">    .reduce(<span class="function">(<span class="params">acc, x</span>) =&gt;</span> myMath.add(acc, x), <span class="number">0</span>)</div><div class="line">    .value()</div><div class="line">filter(<span class="string">'countSMS2'</span>, () =&gt; sumByType(<span class="number">0</span>));</div><div class="line">filter(<span class="string">'countProject2'</span>, () =&gt; sumByType(<span class="number">1</span>))</div></pre></td></tr></table></figure></p>
+<p>全<code>lamda</code>函数写，看起来就很爽</p>
+<p>这里用到的就是<code>curry</code>化。<code>sumByType</code>函数是<code>curried function</code>。部分调用后产生偏函数(<code>partial</code>)。解决了重复的问题。当然这个sumByType也叫高阶函数(<code>HOF</code>)。</p>
+<h1 id="一点总结"><a href="#一点总结" class="headerlink" title="一点总结"></a>一点总结</h1><p><code>javascript</code>在函数式上只是稍具意味，属于东拼西凑，需要搭配第三方库来配合使用。使用<code>javascript</code>时应该综合考虑。不应盲目使用编程范式。但是相信之后函数式编程范式在<code>javascipt</code>上会得到增强。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/cexoso/2017/05/13/TDD/">敏捷开发TDD</a>
-    </h1>
-  
+      </div>
+    </span>
+  </div>
+</div>
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">tdd</a>
-        		</li>
-      		
-		</ul>
-	</div>
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://cexoso.github.io/2017/08/26/fp-in-js/" alt="微信分享二维码">
+    </div>
+</div>
 
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
   
   
-    </div></section>
+    <a href="/cexoso/2017/07/17/suggest-for-angular-js/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">一次重构angular代码建议收集</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+
+
+
+  
+  
   
 
-    
-    <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/cexoso/archives/">&laquo; Prev</a><a class="page-number" href="/cexoso/archives/">1</a><span class="page-number current">2</span>
-    </nav>
+  
+
   
 
 
@@ -246,8 +346,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
