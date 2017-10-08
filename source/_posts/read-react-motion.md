@@ -1,6 +1,6 @@
 ---
 title: react-motion源码阅读
-date: 2017-05-21 20:19:02
+date: 2017-10-08 15:01:03
 tags: react-motion react动画
 reward: true
 ---
@@ -317,7 +317,7 @@ motion中的state存着4个值。currentStyle当前样式，currentVelocity当�
 
 在startAnimationIfNecessary主要是获取时间来迭代计算state中的值。其中用到一个变量函数stepper。
 
-#stepper.js
+# stepper.js
 
 ```javascript
 /* @flow */
