@@ -6,19 +6,14 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="//cexoso.github.io">
-  <title>react复杂组件 | 暧月的猫</title>
+  <title>Tag: react-motion react动画 | 暧月的猫</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="react复杂组件开门见山的说。我刚开始认为react写一个组件是非常简单的事。因为react好像就是为了组件设计而生的，React的应用就是由组件组合而成的。">
-<meta name="keywords" content="react,复杂组件,components">
-<meta property="og:type" content="article">
-<meta property="og:title" content="react复杂组件">
-<meta property="og:url" content="//cexoso.github.io/2017/06/17/about-react/index.html">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="暧月的猫">
+<meta property="og:url" content="//cexoso.github.io/tags/react-motion-react动画/index.html">
 <meta property="og:site_name" content="暧月的猫">
-<meta property="og:description" content="react复杂组件开门见山的说。我刚开始认为react写一个组件是非常简单的事。因为react好像就是为了组件设计而生的，React的应用就是由组件组合而成的。">
-<meta property="og:updated_time" content="2017-06-22T03:18:29.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="react复杂组件">
-<meta name="twitter:description" content="react复杂组件开门见山的说。我刚开始认为react写一个组件是非常简单的事。因为react好像就是为了组件设计而生的，React的应用就是由组件组合而成的。">
+<meta name="twitter:title" content="暧月的猫">
   
     <link rel="alternative" href="/atom.xml" title="暧月的猫" type="application/atom+xml">
   
@@ -144,161 +139,60 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-about-react" class="article article-type-post " itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
+            
   
-    <h1 class="article-title" itemprop="name">
-      react复杂组件
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/cexoso/archives/2017" class="archive-year">2017</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/cexoso/2017/10/08/read-react-motion/" class="archive-article-date">
+  	<time datetime="2017-10-08T07:01:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-10-08</time>
+</a>
+        </div>
+    	 
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/cexoso/2017/10/08/read-react-motion/">react-motion源码阅读</a>
     </h1>
   
 
-        
-        <a href="/cexoso/2017/06/17/about-react/" class="archive-article-date">
-  	<time datetime="2017-06-17T10:18:23.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-06-17</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="react复杂组件"><a href="#react复杂组件" class="headerlink" title="react复杂组件"></a>react复杂组件</h1><p>开门见山的说。我刚开始认为react写一个组件是非常简单的事。因为react好像就是为了组件设计而生的，React的应用就是由组件组合而成的。</p>
-<a id="more"></a>
-<p>然作为view层的react，在缺少状态管理工具如redux时,会在构建应用的时候非常无力，也会在做复杂组件的时候乏力。把复杂组件比喻成一个简单的应用就显而易见了。</p>
-<p>首先来看看一个，一个好的React组件应该具备的点:</p>
-<p>一. 状态映射形态</p>
-<p>组件有什么表现方式？长什么样？都应该有可能转换成能够通过props来控制的情况。举例说明:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// component</span></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">Input</span>(<span class="params">props</span>) </span>&#123;</div><div class="line">    <span class="keyword">return</span> &lt;input &#123;...props&#125; type="text"/&gt;</div><div class="line">&#125;</div><div class="line"></div><div class="line">&lt;Input value="the value i want"/&gt;</div></pre></td></tr></table></figure></p>
-<p>Input有能力通过给定value值来让input显示给定值。组件不一定一开始就做到有非常完备的属性能够让使用者控制表现形式，但是一定要有能力在将来添加上这种能力。一个反例就是：react-iscroll只是简单的包裹了iscoll，它是没有办法让你传入一个值来控制滚动的位置的(能够给一个初始化的值，但之后不能够控制了)。对于这种不能自己掌控的组件有时候我们会采取代替的方法（并不是很好，一旦违背了规则就有可能在将来为捷径埋单）。</p>
-<p>二. 外界注入逻辑</p>
-<p>组件能够有自身的逻辑，一旦外界决定要插手逻辑，要让他们能够找到能插手的余地。例如:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Input</span> <span class="keyword">extends</span> <span class="title">Components</span> </span>&#123;</div><div class="line">    <span class="keyword">constructor</span>(props) &#123;</div><div class="line">        <span class="keyword">super</span>(props);</div><div class="line">        <span class="keyword">this</span>.state = &#123;</div><div class="line">            <span class="attr">value</span>: <span class="string">""</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    onChange(e) &#123;</div><div class="line">        <span class="keyword">this</span>.setState(&#123;<span class="attr">value</span>: e.target.value&#125;)</div><div class="line">    &#125;</div><div class="line">    render() &#123;</div><div class="line">        <span class="keyword">return</span> &lt;input &#123;...this.props&#125; onChange=&#123;this.onChange.bind(this)&#125; value=&#123;this.state.value&#125;&gt;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>这是一个不好的例子。Input组件自己完成了能输入能显示的逻辑。但是外界插手不了这个逻辑。稍微修改一下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Input</span> <span class="keyword">extends</span> <span class="title">Components</span> </span>&#123;</div><div class="line">    <span class="keyword">constructor</span>(props) &#123;</div><div class="line">        <span class="keyword">super</span>(props);</div><div class="line">        <span class="keyword">this</span>.state = &#123;</div><div class="line">            <span class="attr">value</span>: <span class="string">""</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    onChange(e) &#123;</div><div class="line">        <span class="keyword">const</span> change = <span class="keyword">this</span>.props.onChange</div><div class="line">        <span class="keyword">this</span>.setState(change ? change(e) : &#123;<span class="attr">value</span>: e.target.value&#125;)</div><div class="line">    &#125;</div><div class="line">    render() &#123;</div><div class="line">        <span class="keyword">return</span> &lt;input &#123;...this.props&#125; onChange=&#123;this.onChange.bind(this)&#125; value=&#123;this.state.value&#125;&gt;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>这种实现方式也不是很好，只是提供一下例子。</p>
-<p>三. 外界能够掌控组件</p>
-<p>外界能够掌控组件说的是外界能知道现在组件是什么状态，例如:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Logic</span> <span class="keyword">extends</span> <span class="title">Components</span> </span>&#123;</div><div class="line">    render() &#123;</div><div class="line">        <span class="keyword">return</span> (&lt;Form&gt;</div><div class="line">            &lt;Select name="f1"/&gt;</div><div class="line">            &lt;DropDown name="f2"/&gt;</div><div class="line">            &lt;Tel name="f2"/&gt;</div><div class="line">        &lt;/Form&gt;)</div><div class="line">    &#125; </div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>Logic类中使用了表单Form来管理Select,DropDown,Tel组件。Logic类平时并不管这些表单组件的逻辑。而是在需要的时候能够知道表单的状态如所有字段的值？是否校验通过？是否正在进行异步校验？</p>
-<h1 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h1><p>暂时没有</p>
-<p>2017年6月18日, PM 11:04:00发现一篇挺不错的文章。<br><a href="https://zhuanlan.zhihu.com/p/27434557" target="_blank" rel="external">精读 React 高阶组件</a>,里面提到了解决的方法。<br>非常建议一读</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
+        <div class="article-info info-on-right">
+          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">react</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">复杂组件</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">components</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">react-motion react动画</a>
         		</li>
       		
 		</ul>
 	</div>
 
-      
+          
 
-      
-
-      
-        
-<div class="share-btn share-icons tooltip-left">
-  <div class="tooltip tooltip-east">
-    <span class="tooltip-item">
-      <a href="javascript:;" class="share-sns share-outer">
-        <i class="icon icon-share"></i>
-      </a>
-    </span>
-    <span class="tooltip-content">
-      <div class="share-wrap">
-        <div class="share-icons">
-          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
-            <i class="icon icon-weibo"></i>
-          </a>
-          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
-            <i class="icon icon-weixin"></i>
-          </a>
-          <a class="qq share-sns" href="javascript:;" data-type="qq">
-            <i class="icon icon-qq"></i>
-          </a>
-          <a class="douban share-sns" href="javascript:;" data-type="douban">
-            <i class="icon icon-douban"></i>
-          </a>
-          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
-            <i class="icon icon-qzone"></i>
-          </a>
-          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
-            <i class="icon icon-facebook"></i>
-          </a>
-          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
-            <i class="icon icon-twitter"></i>
-          </a>
-          <a class="google share-sns" href="javascript:;" data-type="google">
-            <i class="icon icon-google"></i>
-          </a>
         </div>
-      </div>
-    </span>
-  </div>
-</div>
-
-<div class="page-modal wx-share js-wx-box">
-    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=http://cexoso.github.io/2017/06/17/about-react/" alt="微信分享二维码">
-    </div>
-</div>
-
-<div class="mask js-mask"></div>
-      
-      <div class="clearfix"></div>
-    </div>
+        <div class="clearfix"></div>
+    </header>
   </div>
 </article>
-
-  
-<nav id="article-nav">
-  
-    <a href="/cexoso/2017/06/18/customize-update/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          自定义react更新机制
-        
-      </div>
-    </a>
   
   
-    <a href="/cexoso/2017/06/17/do-eslint-precommit/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">使用git precommit完成前端eslint校验</div>
-      <i class="icon-circle-right"></i>
-    </a>
-  
-</nav>
-
-
-
-
-
-  
-  
+    </div></section>
   
 
-  
-
-  
+    
 
 
           </div>
@@ -321,9 +215,9 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: true,
+		isPost: false,
 		isArchive: false,
-		isTag: false,
+		isTag: true,
 		isCategory: false,
 		open_in_new: false,
 		root: "/cexoso/",
