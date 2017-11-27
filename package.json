@@ -21,6 +21,6 @@
     "hexo-server": "^0.2.0"
   },
   "scripts": {
-    "deploy": "hexo g"
+    "build": "hexo g"
   }
 }
