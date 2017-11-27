@@ -4,10 +4,22 @@ node_js:
 cache:
   directories:
   - node_modules
-script: 
-  - npm run deploy
+script:
+- npm run build
+after_script:
+- cd ./public
+- git init
+- git config user.name "travis upload"
+- git config user.email "285516193@qq.com"
+- git add .
+- git commit -m "Update docs"
+- git push --force --quiet "https://${GH_TOKEN}@${GH_REF}" gh-pages
 branches:
   only:
   - master
 git:
   depth: 1
+env:
+  global:
+  - GH_REF: https://github.com/cexoso/cexoso
+  - secure: orKargKn0JtUb2UD0LykjUz1JP4aikXwXJjXgacpStnTLeOcJz4Dh/5E6G/LC8uVe/X0BoiR2JULflhzsR+LwAL1+YkUiJVen+HGXW1lL2qXmw7KGoRlDxHplFf0yxd/MWYYRByMAUsIQoaxOQjsFJozZnio2vNZc7baNjan6iPnuBRqzPvnPMKvMBeKwBFChz3u7X1oFqxWg4mj8XAhUxfGskm4/PXkS+T7c5RBw3ABSXY9PT6F8bmxwXNI9lTkoZG8Ze4XvUCQWfR0SRJIcVwMbNA3oc4ECt8JRhM2vEU2y10g5eUaUqiU3YWIUn8kVArdS94cL4mZxdYyjQSPIofhSgf8onwW9JdJm07uGZ8VfvPjdR84HXYmA/lZ0UP+3mFFjq9ylGacY0t2zQps7c/BGd4/8mHQH8fJJbJ09XUyhDnBwYEuCozudqeuPKlWLFfNtmKTdth4nmb+WI6TmvtxLiIV19ctXWJqLShUN4eNGrEfn+R1KC+TcHohVOkFRRo2IWFpjSzDxOFsuLqpiPvh18J9mfAcw9YWgFLkbmCsioL69V0KBQ4c0ilR/zkOp2+LnKc1CtXEewSxoLH6KYXUbJCjkLdOpqyZEob6D3QdXbgZdKpndRiUx38lUbrIZweSldkWVV1ATJI04IfNMPKes0pmAE7p3FakZnQ9IRg=
