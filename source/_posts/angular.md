@@ -119,3 +119,40 @@ updateValue(value: any) {
 <h1> {{title}} </h1>
 <input type="text" [value]="title">
 ```
+
+使用如下的双向绑定语法，它是混合了值绑定和事件绑定的简易格式 - [{}]。这被乐观地称之为盒子里的香蕉。*（译者表示真的不知道这段话到底有什么幽默点）*
+
+```html
+<h1> {{title}} </h1>
+<input type="text" [(ngModel)]="title" name="title">
+```
+
+#### 04.ngModel 和表单字段
+ngModel不单单在双向数据绑定上有用。值得肯定的是它还会附加CSS样式类，用来表明表单字段的控制。
+
+看看这一段表单字段 - 姓和名。ngModel被设置成了视图模型上的fname和lname字段(vm变量在组件内定义了)。
+
+```html
+<input type="text" [(ngModel)]="vm.fname" name="firstName" #fname required /> 
+{{fname.className}} <br />
+<input type="text" [(ngModel)]="vm.lname" name="lastName" #lname /> 
+{{lname.className}}
+```
+请注意，如果ngModel在form标签内使用的话，它就需要搭配一个name属性。控制也会同时注册到form上(上层使用name属性值，如果不提供name属性会产生一个如下的错误)。
+
+> If ngModel is used within a form tag, either the name attribute must be set or the form control must be defined as 'standalone' in ngModelOptions.
+
+*(意思为: 如果ngModel在form标签内使用的话，要不就提供name属性，要不就在ngModelOptions国的standalong中定义表单控制)*
+
+正确的使用会在用户使用表单输入的时候添加如下的CSS类。
+
+**ng-untouched** - 表单一加载完成后字段被会被设置。用来表示用户还没有使用这个字段和聚集它
+
+**ng-touched** - 当用户通过键盘或者鼠标聚集字段，又移动到其它字段上后。这个类会被添加。
+
+**ng-pristine** - 这个类用来表明字段上的值一直没有改变过。
+
+**ng-dirty** - 这个类在用户改变字段值的时候会被设置
+
+
+//TODO http://www.dotnetcurry.com/angular/1385/angular-4-cheat-sheet
