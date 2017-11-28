@@ -72,7 +72,7 @@ title = 'Angular 4';
 
 `<input type="text" [placeholder]="title" />`
 
-###03.Events
+### 03.Events
 为了给DOM事件绑定上组件中的函数，我们使用如下语法。将DOM事件包裹在小括号中，就好像它调用了组件中的函数一样。
 
 `<button (click)="updateTime()">Update Time</button>`
@@ -154,5 +154,50 @@ ngModel不单单在双向数据绑定上有用。值得肯定的是它还会附�
 
 **ng-dirty** - 这个类在用户改变字段值的时候会被设置
 
+**ng-valid** - 这个类会在表单字段校验通过，不失败时添加。例如当一个required字段有值。
 
-//TODO http://www.dotnetcurry.com/angular/1385/angular-4-cheat-sheet
+**ng-invalid** - 这个类会在表单字段失败是添加，例如当一个required字段没有值。
+
+这个特性允许特定场景中自定义CSS类。例如一个无效的字段会高亮红色的背景来提示用户。
+
+为组件中的元素定义如下的CSS。
+
+```css
+.ng-invalid {
+  background: red;
+}
+```
+
+### 05.ngModule
+
+创建一个Angular模块只需要在类上使用ngModule装饰就可以了。
+
+一个模块帮助打包一系列的Anglar制品如:组件(component)，指令(directives)，管道(pipes)等。它有助于（ahead-of-time）AoT编译。一个模块向其它的模块导出组件指令和管道。它也可能依赖其它模块。
+
+参考下列例子。
+
+*注意*： 所有的组件都必须在模块中申明
+
+```javascript
+import { NgModule }      from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { MyAppComponent }  from './app.component';
+ 
+@NgModule({
+  imports:      [ BrowserModule ],
+  declarations: [ MyAppComponent ],
+  bootstrap:    [ MyAppComponent ]
+})
+export class MyAppModule { }
+```
+
+从angular核心包中导入ngModule。它是一个装饰函数，可以被应用于一个类上。我们可以提供以下元数据来创建一个模块。
+
+**imports**: 依赖的*BrowserModule*使用imports指定。注意imports支持数组。多个依赖可以被同时申明。
+
+**declarations**: 所有与当前模块关联的组件，都应用使用declarations数组申明。
+
+**bootsctrap**: 每一个Angular应用需要有一个根模块。根模块需要一个根组件用于在index.html中渲染。在这个例子中。MyAppComponent (通过相对路径导入)就是第一个被加载的根组件。
+
+### 06.Service
+
