@@ -272,3 +272,123 @@ export class TimeService {
 
 #### 6.3提供模块级别的服务
 
+当TimeService在模块级被提供时(相对于组件级),服务的实例就在多模块(和应用)中可见了。它就像是应用中的单例一样。
+
+```javascript
+@NgModule({
+  declarations: [
+    AppComponent,
+    SampleComponent
+  ],
+  imports: [
+    BrowserModule
+  ],
+  providers: [TimeService],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+```
+
+#### 6.4 使用替换语法来提供服务
+在上面的例子中，provider是下面语法的简写。
+
+```javascript
+// instead of providers: [TimeService] you may use the following,
+  providers: [{provide: TimeService, useClass: TimeService}]
+```
+
+它允许专门的类或者替代类的实现(例子中的TimeService)。新的类可以是派生类，或者相对于原始类，拥有相似签名的函数(鸭子类型)。
+
+`providers: [{provide: TimeService, useClass: AlternateTimeService}]`
+
+在下面的这个例子中，AlternateTimeService提供日期和时间，而原始的TimeService只提供日期。
+
+```javascript
+@Injectable()
+export class AlternateTimeService extends TimeService {
+ 
+  constructor() {
+    super();
+   }
+ 
+  getTime(){
+    let dateObj: Date = new Date();
+    return `${dateObj.getDay()}/${dateObj.getMonth()}/${dateObj.getFullYear()}
+                   ${dateObj.getHours()}:${dateObj.getMinutes()}`;
+  }
+}
+```
+
+**注意**下面语句的使用方式，Angular会注入一个新的服务实例。
+
+`[{provide: TimeService, useClass: AlternateTimeService}]
+`
+
+若要使用已经存在的实例，使用useExisting来代替useClass
+
+`providers: [AlternateTimeService, {provide: TimeService, useExisting: AlternateTimeService}]`
+
+#### 6.5提供一个接口和它的实现
+
+一个好的想法是提供一个接口并且实现这个接口。参考下面的接口。
+
+```javascript
+interface Time{
+    getTime(): string
+}
+export default Time;
+```
+
+它可以被TimeService实现如下。
+```javascript
+@Injectable()
+export class TimeService implements Time {
+  constructor() { }
+ 
+  getTime(){
+    let dateObj: Date = new Date();
+    return `${dateObj.getDay()}/${dateObj.getMonth()}/${dateObj.getFullYear()}`;
+  }
+}
+```
+这一点上，我们不可以用实现Time接口和TimeService类的方法完成之前的例子。
+
+就如同下面的代码并不能够正常动作，因为在Typescript中，接口是不会编译成等价的javascript的。
+
+`providers: [{provide: Time, useClass: TimeService}] // Wrong`
+
+为了解决这个问题，使用从@angular/core中导入的Inject(装饰器)和InjectionToken。
+```javascript
+// create an object of InjectionToken that confines to interface Time
+let Time_Service = new InjectionToken<Time>('Time_Service');
+ 
+// Provide the injector token with interface implementation.
+providers: [{provide: Time_Service, useClass: TimeService}]
+  
+// inject the token with @inject decorator
+constructor(@Inject(Time_Service) ts,) {
+      this.timeService = ts;
+}
+ 
+// We can now use this.timeService.getTime().
+```
+
+#### 6.6提供一个值
+
+我们并不需要总是写一个类来当作服务。
+
+这一段语法像我们展示了使用JSON对象来作为服务。
+
+```javascript
+providers: [{provide: TimeService, useValue: {
+  getTime: () => `${dateObj.getDay()} - ${dateObj.getMonth()} - ${dateObj.getFullYear()}`
+}}]
+```
+**注意**: 有一个相似的实现可以代替`6.5提供一个接口和它的实现`节中，使用useValue代替useClass。其余的实现保持不变。
+
+```javascript
+providers: [provide: Time_Service, useValue: {
+  getTime: () => 'A date value'
+}}]
+```
+
