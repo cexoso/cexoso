@@ -200,4 +200,75 @@ export class MyAppModule { }
 **bootsctrap**: 每一个Angular应用需要有一个根模块。根模块需要一个根组件用于在index.html中渲染。在这个例子中。MyAppComponent (通过相对路径导入)就是第一个被加载的根组件。
 
 ### 06.Service
+在Angular中创建服务，是为了代码片的复用。比如用来接受服务器端API的服务，或者是提供配置信息的服务等。
+
+创建一个服务很简单，只需要从@angular/core中导入@injectable并装饰一个类。
+
+这允许angular创建一个实例并且向组件或者其它服务注入它。
+
+看看这个假设的例子。它创建一个叫TimeService的类用来提供一个固定格式的时间值。这个服务是可以跨应用来使用的。getTime()函数可以在应用的组件中被调用。
+
+```javascript
+import { Injectable } from '@angular/core';
+ 
+@Injectable()
+export class TimeService {
+  constructor() { }
+  getTime(){
+    return `${new Date().getHours()} : ${new Date().getMinutes()} : ${new Date().getSeconds()}`;
+  }
+}
+```
+
+#### 6.1依赖注入(DI)
+
+在介绍服务寻一段中，我们看到了使用Injectable()装饰器创建一个服务。Injectable帮助Angular注入一个由服务类创建的实例。它仅当服务有其它依赖是才被需要。无论如何，一个好的实践方式是为所有的服务类都加上Injectable()装饰(即使某些类并不存在依赖)来保证代码同一性。
+
+有了依赖注入，Angular可以为组件创建服务的实例。这为对象的创建单例的实现都提供了便利，也让代码更益于单元测试。
+
+#### 6.2提供一个服务
+
+将服务注入到组件中，需要将服务在providers数组中申明。这个操作可以在模块级别(能大范围访问)或者组件级别(只在组件域中访问)完成。在这个点服务会被Angular实例化。
+
+这里有一个组件例子，被注入的服务实例在组件和子组件中都存在。
+
+```javascript
+import { Component } from '@angular/core';
+import { TimeService } from './time.service';
+@Component({
+  selector: 'app-root',
+  providers: [TimeService],
+  template: `<div>Date: {{timeValue}}</div>,
+})
+export class SampleComponent {
+  // Component definition
+}
+```
+
+为了完成依赖注入的过程，要在构造函数中用参数的形式指服务。
+
+```javascript
+export class SampleComponent {
+  timeValue: string = this.time.getTime(); // Template shows
+  constructor(private time: TimeService){
+  }
+}
+```
+
+上文提到的TimeService具体实现如下，
+
+```javascript
+import { Injectable } from '@angular/core';
+ 
+@Injectable()
+export class TimeService {
+  constructor() { }
+  getTime(){
+    let dateObj: Date = new Date();
+    return `${dateObj.getDay()}/${dateObj.getMonth()}/${dateObj.getFullYear()}`;
+  }
+}
+```
+
+#### 6.3提供模块级别的服务
 
