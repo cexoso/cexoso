@@ -391,4 +391,4 @@ providers: [provide: Time_Service, useValue: {
   getTime: () => 'A date value'
 }}]
 ```
-
+TODO// http://www.dotnetcurry.com/angular/1385/angular-4-cheat-sheet
