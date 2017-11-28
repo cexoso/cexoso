@@ -391,4 +391,68 @@ providers: [provide: Time_Service, useValue: {
   getTime: () => 'A date value'
 }}]
 ```
+
+### 0.7指令
+从Angular2以上，指令被宽泛的分成如下几类:
+
+1. **组件** - 包含模板。它们是最初级的Angular应用的积木。相关参考本文的组件部分
+2. **结构指令** - 用来控制布局的指令，通常用在元素的属性上和控制DOM流。例如NgFor,NgIf等。
+3. **属性指令** - 动态地为元素添加行为和样式，例如NgStyle。
+
+#### 7.1Ng-if...else
+一个按条件展示模块的结构指令。如下示例。ngIf指令守卫展示一半字符串Time:[with no value]当title为空时。else展示一个模板当没有值赋给title时。
+
+注意这的语法，指令前有一个星号。
+```html
+<div *ngIf="title; else noTitle">
+  Time: {{title}}
+</div>
+ 
+<ng-template #noTitle> Click on the button to see time. </ng-template>
+```
+
+一旦title赋值为value后，Time:[value]就会被展示，#noTitle模块就会隐藏起来，else也不会被执行。
+
+#### 7.2Ng-Template
+
+Ng-Template是一个结构指令，默认不会展示。它是用来包裹元素内内容的。默认情况下它会将模块渲染成html中的注释。
+
+下而的内容会随便条件展示。
+
+```html
+<div *ngIf="isTrue; then tmplWhenTrue else tmplWhenFalse"></div>
+<ng-template #tmplWhenTrue >I show-up when isTrue is true. </ng-template>
+<ng-template #tmplWhenFalse > I show-up when isTrue is false </ng-template>
+```
+
+**注意**: 这种方式可以代换ng-if...else的实现，并且在代码可读性上更好，我们可以用if...then...else。这个例子中元素在条件为真性展示，并且展示的内容移到了模板中维护。
+
+#### 7.4Ng-Container
+
+Ng-Container是另一个用来包裹HTML元素的指令/组件。
+
+我们用div或者span包裹元素。无论如何，在一挺多的应用中，会存在一个默认的样式被应用到元素上。为了行为更可预测，优先推荐Ng-Container。它会包裹元素，却不会渲染成HTML标签。
+
+看看下面的例子。
+
+```html
+// Consider value of title is Angular
+Welcome <div *ngIf="title">to <i>the</i> {{title}} world.</div>
+```
+它会渲染成
+```
+Welcome
+to the Angualr world
+```
+使用Ng-Container代替div，如下代码
+
+```html
+Welcome <ng-container *ngIf="title">to <i>the</i> {{title}} world.</ng-container>
+```
+结果如下
+```
+Welcome to the Angular world
+```
+区别在于第一个例子多渲染了一个div而Ng-Container不会渲染成标签。
+
 TODO// http://www.dotnetcurry.com/angular/1385/angular-4-cheat-sheet
