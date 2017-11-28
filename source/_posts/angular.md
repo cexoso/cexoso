@@ -455,4 +455,8 @@ Welcome to the Angular world
 ```
 区别在于第一个例子多渲染了一个div而Ng-Container不会渲染成标签。
 
+#### 7.4Ng Switch 和Ng SwitchCase
+我们可以用在angular模板中使用switch case语句。就像在javascript中使用switch..case一样。
+
+参考代码片段。isMetric是一个组件上定义的变量。如果它的值为真
 TODO// http://www.dotnetcurry.com/angular/1385/angular-4-cheat-sheet
