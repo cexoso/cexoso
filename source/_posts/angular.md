@@ -458,5 +458,97 @@ Welcome to the Angular world
 #### 7.4Ng Switch 和Ng SwitchCase
 我们可以用在angular模板中使用switch case语句。就像在javascript中使用switch..case一样。
 
-参考代码片段。isMetric是一个组件上定义的变量。如果它的值为真
+参考代码片段。isMetric是一个组件上定义的变量。如果它的值为真,就会显示Degree Celsicus,否则就会显示Fahrenheit
+
+**注意 ngSwitch是一个属性指令而ngSwitchCase是一个结构指令**
+```html
+<div [ngSwitch]="isMetric">
+  <div *ngSwitchCase="true">Degree Celsius</div>
+  <div *ngSwitchCase="false">Fahrenheit</div>
+</div>
+```
+请注意，我们应该使用ngSwitchDefault指令来展示默认元素，以备所有值都不配置时不会什么都不显示。
+
+如果isMetric是布尔值变量，那么下面的代码与之前的代码是等效的。
+```html
+<div [ngSwitch]="isMetric">
+  <div *ngSwitchCase="true">Degree Celsius</div>
+  <div *ngSwitchDefault>Fahrenheit</div>
+</div>
+```
+
+#### 7.5Input装饰器
+类内的值是可以配置通过指令获取的，值由使用指令的组件提供。
+
+看看下面的代码片段。这是一个展示登陆字段的组件(组件是指令的一种)。
+
+逻辑组件使用登陆组件，可以设置showRegister为true，就会显示注册按钮。想使用将值提供给类的功能，使用Input装饰器装饰类就好了。
+
+```javascript
+Import Input()
+import { Component, OnInit, Input } from '@angular/core';
+```
+*译者注： Import Input()不是合法的语法，此处可以是手误*
+
+装饰器装饰。
+```javascript
+@input() showRegister: boolean;
+```
+
+在组件模板中使用提供的值，示例如下。
+
+```html
+<div>
+  <input type="text" placeholder="User Id" />
+  <input type="password" placeholder="Password" />  
+  <span *ngIf="showRegister"><button>Register</button></span>
+  <button>Go</button>
+</div>
+```
+
+当使用这个组件的时候，像这样提供值给它：
+
+```html
+<login shouldShowRegister="true"></login>
+```
+使用绑定数据代替直接提供值，使用如下语法：
+```html
+<app-login [shouldShowRegister]="isRegisterVisible"></app-login>
+```
+
+*译者注： app-login应该是上文的login*
+
+我们可以提供另一个绑定属性的名字心区分变量的名字，看看下面的例子:
+
+```javascript
+@Input("should-show-register") showRegister: boolean;
+```
+
+现在，使用`should-show-register`代替`showRegister`:
+
+```html
+<app-login should-show-register="true"></app-login>
+```
+
+#### 7.6输出装饰器
+
+事件被指令发给使用指令的组件(或指令)，在那个登陆的例子中，点击登陆，一个事件应该携带着user id 和password被发出。
+
+看看下面代码，导入Output装饰器和EventEmitter，
+
+```javascript
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+```
+申明一个类型为EventEmitter的Output事件
+```javascript
+@Output() onLogin: EventEmitter<{userId: string, password: string}>;
+```
+注意onLogin是一个EventEmitter的泛型类型，它期望被发出时带着含有user id和password的对象。
+
+接着初始化对象
+```javascript
+constructor() {
+  this.onLogin = new EventEmitter();
+}
+```
 TODO// http://www.dotnetcurry.com/angular/1385/angular-4-cheat-sheet
