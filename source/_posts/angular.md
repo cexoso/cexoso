@@ -587,3 +587,85 @@ loginHandle(event) {
 ```html
 <app-login (login)="loginHandler($event)"></app-login>
 ```
+
+### 08 脏检查策略(change detection strategy)
+Angular自上向下传播改变，从父组件传递给子组件。
+
+Angular中的每一个组件都有一个等价的脏检查类。一旦组件的数据模型更新了，它就会对比新值和旧值，数据模型的改变会被应用到DOM上。
+
+对于组件上的输入类型为number和string型的，它们的值是不可变的。一旦值改变了，脏检查类就会标记改变，DOM就会更新。
+
+对于对象类型，比较是否变化的方法可能是以下的一种：
+
+**Shallow Comparison**: 浅比较对比对象的的引用，如果一个或者多个对象中的字段更新了，而对象的应用没有更新的话，浅比较会认为没有值改变发生。这种方法与不可变对象类型完美组合。意思是，对象不能被修改，改变对象的唯一方法是创建一个新的对象并将引用指向新对象，那样脏检查会被完美触发。
+
+**Deep Comparison**: 深比较迭代对象中的每一个字段，并且与之前的值对比。这种策略在可变对象中也可以生效。也就是说一旦某个字段改变了。脏检查就能检查出来。
+
+#### 8.1组件的脏检查策略
+在一个组件中，我们可以使用一个或两个检查策略来装饰它。
+
+#### ChangeDetectionStrategy.Default：
+像它的名字一样，它是默认的策略。当没有明确指定其它策略时。它就生效。
+
+使用这个策略，当组件接收一个对象作为输入时，深比较会在每一次改变时进行。也就是说，当有一个字段改变的时候，也会迭代所有的字段，然后标记出改变了的那一个。接着改变DOM。
+
+看看下面的示例:
+
+```javascript
+import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
+ 
+@Component({
+  selector: 'app-child',
+  template: '  <h2>{{values.title}}</h2> <h2>{{values.description}}</h2>',
+  styleUrls: ['./child.component.css'],
+  changeDetection: ChangeDetectionStrategy.Default
+})
+export class ChildComponent implements OnInit {
+ 
+// Input is an object type.
+  @Input() values: {
+    title: string;
+    description: string;
+  }
+ 
+  constructor() { }
+ 
+  ngOnInit() {}
+ 
+}
+```
+注意到检查策略明确的提到了是*ChangeDetectionStrategy.Default*，*Input*申明了一个对象中包含了两个字段，并且描述了类型。
+
+这是父组件使用的模块片段。
+```html
+<app-child [values]="values"></app-child>
+```
+父组件中的事件处理句柄如下。这个句柄可能在用户的行为或者其它事件触发。
+```javascript
+updateValues(param1, param2){
+  this.values.title = param1;
+  this.values.description = param2;
+}
+```
+注意，我们更新了值，但是没有改变对象的引用。但是子组件更新了DOM因为脏查检策略是深比较的。
+
+#### ChangeDetectionStrategy.onPush
+默认的策略在定位改变上很有效，但是由于比较时需要循环整个对象来定位改变太消耗性能。我们有性能更优的脏检查策略，OnPush策略。它只是浅对比输入对象和之前对象的引用。
+
+我们刚才看到的例子在OnPush策略下是不会生效的。在例子中，我们只是改变了对象中的值却没有改变对象的引用，子组件无法监控到改变，以至于无法更新DOM。
+
+当我们将组件脏检查策略改为OnPush时，输入的对象就需要是不可变的,我们应该在每一次改变时，为输入对象创建一个新的实例。这要对外引用改变了，每一次改变都会因此正确定位到。
+
+看看下面的代码
+```javascript
+updateValues(param1, param2){
+  this.values = { // create a new object for each change.
+    title: param1,
+    description: param2
+  }
+}
+```
+
+**注意**: 上面的*updateValues*事件处理函数在OnPush策略下是正确的。更明智的做法是使用[immutable.js](https://facebook.github.io/immutable-js/)——强制不可变数据类型的实现。或者是使用可观测对象RxJS或者其它的可观测库。
+
+// TODO http://www.dotnetcurry.com/angular/1385/angular-4-cheat-sheet
