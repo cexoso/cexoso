@@ -797,3 +797,136 @@ dino: Observable<any>; // class level variable declaration
 <div>{{ (dino |async)?.bruhathkayosaurus.appeared }}</div>
 ```
 
+### 13 带我回到Promises
+我们可以使用RxJS操作符将observable转换成promise，如是一个API本来就是返回一个promise的，这是为了更好的向后兼容。这是个非常有用的操作符。
+
+导入toPromise操作符。
+```javascript
+import 'rxjs/add/operator/toPromise';
+```
+对一个observable使用toPromise：
+```javascript
+getData(): Promise<any>{
+  return this.http
+  .get("https://dinosaur-facts.firebaseio.com/dinosaurs.json")
+  .map((response) => response.json())
+  .toPromise();
+}
+```
+在回调函数中接收数据，并且将数据设置到类内以供模板使用的例子如下.
+```javascript
+this.getData()
+  .then((data) =>  this.dino = data)
+  .catch((error) => console.error(error));
+```
+
+看看模板：
+```html
+<div *ngIf="dino">
+    <div>
+    Bruhathkayosaurus appeared {{ dino.bruhathkayosaurus.appeared }} years ago
+    </div>
+</div>
+```
+### 14. Router
+路由是构建单页应用SPA(Single Page Application)的基石。使用路由配置，将组件映射到URL上去。
+
+要开始一个支持路由的Angular应用，使用Angular CLI运行如下的命令。
+```javascrip
+ng new sample-application --routing
+```
+在应用中新增一个路由模块，使用Angular CLI运行如下命令。
+```javascrip
+ng g module my-router-module --routing
+```
+
+#### 14.1 路由出口
+映射到路由(URL)上的组件会在路由出口中被渲染。通常，RouterOutLet被放置在根组件，中展示被映射的组件。
+```html
+<router-outlet></router-outlet>
+```
+#### 14.2 路由配置
+创建一个Routes类(在@angular/router包中)的路由对象。对象是一个包含路由JSON对象的数组。每一个对象有一个或者多个下列字段。
+* path: 指定要匹配的路径
+* component: 在指定的路径下，组件会在router-outlet中展示
+* redirectTo: 当路径匹配时，重定向到另一个路径。例如当路径都不匹配时，重定向到主页。
+* pathMatch: 它允许配置路径匹配策略。当赋值为*full*时，路径需要完整的匹配。而*prefix*允许匹配字符串的开头。*prefix*是默认的。
+
+看看接下来的路由配置：
+```javascript
+const routes: Routes = [
+  {
+    path: 'home',
+    component: Sample1Component,
+  },
+  {
+    path: 'second2',
+    component: Sample2Component
+  },
+  {
+    path: '',
+    redirectTo: '/home',
+    pathMatch: 'full'
+  }
+];
+```
+#### 14.3 子路由
+要配置子路由，需要使用在路由对象中的children，子组件会展示在父组件模板内的router-outlet中。
+
+下面的例子渲染了Sample1Component. 它的模板中有一个router-outlet。Sample2Component在其中渲染。
+```javascript
+const routes: Routes = [
+  {
+    path: 'home',
+    component: Sample1Component,
+    children: [
+      {
+        path: 'second',
+        component: Sample2Component
+      }
+    ]
+  }
+  //... rest of the configuration.    
+]
+ 
+// Template for Sample1Component
+```
+```html
+<div>
+  sample-1 works!
+  <router-outlet></router-outlet> <!--Sample2Component renders below it --> 
+</div>
+```
+
+#### 14.4 参数
+数据可以在不同的路由URL转换中传递。
+
+**在路由中配置变量**： 在下面的例子中，details路由希望接收一个id参数作为url的一部分。如：`http://sample.com/details/10`
+
+```javascript
+{        
+    path: details/:id,
+    component: DetailsComponent
+}
+```
+**读取路由内的参数**： 从@angular/router中导入ActivatedRoute。并注入ActivatedRoute来接收参数。它是一个observable类型，可用来读取URL中的值。如下示例：
+```javascript
+// inject activatedRoute
+constructor(private activeRoute: ActivatedRoute) { }
+ 
+// Read value from the observable     
+this.activeRoute
+      .params
+      .subscribe((data) => console.log(data[id]));
+```
+
+### 写在最后
+Angular是一个飞速发展的Javascript框架。从被称为MV*框架的Angular1.x开始。它已经成为了一个用可重用组件进行UI开发的框架。
+
+由于Angular2以上版本性能的提升和诸多特性持续的添加。新版本的angular我们统称为angular。不需要使用版本号来特别的区分它。
+
+使用Typescript来开发Angular。由于很多特性的支持。开发会更快更简单。本文只是描述了一些特性来让读者开启Angular之路。
+
+编码愉快，使用超级牛X的框架，Angular!
+
+下载PDF格式的 [Angular速查表](http://www.dotnetcurry.net/s/dnc-mag-angular-cheatsheet)（原文）
