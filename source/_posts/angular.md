@@ -551,4 +551,39 @@ constructor() {
   this.onLogin = new EventEmitter();
 }
 ```
-TODO// http://www.dotnetcurry.com/angular/1385/angular-4-cheat-sheet
+
+组件会发出事件，在例子中，当用户点击登陆时，它会通过接下来的函数发出一个事件。
+
+看例子：
+
+```html
+<button (click)="loginClicked(userId.value, password.value)">Go</button>
+```
+
+具体的事件处理函数：
+```javascript
+loginClicked(userId, password) {
+  this.onLogin.next({userId, password})
+}
+```
+当使用这个组件的时候，只需要提供登陆函数函数响应onLogin输出事件就行了。
+```html
+<app-login (onLogin)="loginHandler($event)"></app-login>
+```
+
+登陆句柄能从组件接收用户id和密码
+```javascript
+loginHandle(event) {
+  console.log(event);
+  // Perform login action.
+}
+// Output: Object {userId: "sampleUser", password: "samplePassword"}
+```
+与输入装饰器相似的是，输出装饰器可以使用另一个事件名字暴露给使用自己的组件/指令。它可以不使用变量名。看看以下代码段。
+```javascript
+@Output("login") onLogin: EventEmitter<{userId: string, password: string}>;
+```
+像这样使用组件：
+```html
+<app-login (login)="loginHandler($event)"></app-login>
+```
