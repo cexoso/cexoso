@@ -668,4 +668,132 @@ updateValues(param1, param2){
 
 **注意**: 上面的*updateValues*事件处理函数在OnPush策略下是正确的。更明智的做法是使用[immutable.js](https://facebook.github.io/immutable-js/)——强制不可变数据类型的实现。或者是使用可观测对象RxJS或者其它的可观测库。
 
-// TODO http://www.dotnetcurry.com/angular/1385/angular-4-cheat-sheet
+### 09. Transclusion in Angular（Transclusion 是Angular指令中的包含功能）
+
+之前的两章(输入输出装饰器)中，我们看到了Input,Output是如何使用组件属性工作的。
+
+那么，怎样使用元素开标签和闭标签中的内容呢？
+
+AngularJS 1.x指令功能中有一个transclusion属性，允许将指令中的内容在做为指令的一部分渲染。举个例子，一个元素`<blue></blue>`中可能有很多的元素，表达式，和文本。blue组件会显示它们并应用一个蓝色背景。
+
+```html
+<blue>sample text</blue>
+```
+在blue组件模板中，使用ng-content来接收元素中的内容。并用CSS class来应用样式，如下：
+```html
+<div class="blue">
+  <ng-content></ng-content>
+</div>
+```
+ng-content展示从上个例子上传递下来的sample text。它可以包含更多的元素数据绑定表达式等。
+
+### 10 在Angular模板中使用observables
+
+*observable 为特有名词，译为可观测的， 下文不再翻译*
+
+可观测数据就如它的定义一样，可能在沉浸模板的时候还不存在真实的数据。*ngIf指令可以用于条件化的沉浸段。看看下面的代码。
+```html
+<div *ngIf="asyncData | async; else loading; let title">
+  Title: {{title}}
+</div>
+<ng-template #loading> Loading... </ng-template>
+```
+
+注意到async管道。上面的例子检查了异步可观测数据asyncData来返回数据。当observable还没有数据时，它沉浸模板*loading*.当observable返回一个数据的时候，值就会被设置，async管道与promise也能工作良好。
+
+#### NgFor
+
+使用*NgFor指令来迭代数组或者一个observable。下面的代码迭代颜色数据并且为每一个数组内的项引用一个颜色值。
+
+```html
+<ul *ngFor="let color of colors">
+  <li>{{color}}</li>
+</ul>
+ 
+/* component declares array as  colors= ["red", "blue", "green", "yellow", "violet"]; */
+```
+
+**注意**: 使用async管道当colors是一个observable或者promise
+
+### 11 严格的空检测
+
+Typescript 4 介绍了严格的空值检测来达到更好的类型检测。Typescript(& Javascript)和特殊类型*null*和*undefined*.
+
+在Angular应用开启了严格类型检测，null或者undefined就不能够赋值给一个变量，除非这个变量本身就是这null或者undefined类型。
+
+看看如下示例：
+```javascript
+var firstName: string, lastName: string ;
+//returns an error, Type 'null' is not assignable to type 'string'.
+firstName = null;
+// returns an error, Type 'undefined' is not assignable to type 'string'.
+lastName = undefined;
+```
+现在明确地定义null和undefined类型，重新访问变量申请如下：
+```javascript
+var firstName: string | null, lastName: string | undefined ;
+// This will work
+firstName = null;
+lastName = undefined;
+```
+默认的，strictNullCheck是禁用的。我们编辑tsconfig.json文件来启用strictNullCheck。在compilerOptions中添加strictNullCheck: true
+
+### 12 HTTP API calls and Observables
+使用,从'@angular/http'中导出的内建模块Http服务，来调用服务器端的API，注入Http服务到一个组件或者另一个服务中。看看下而的代码，对Wikipedia的URL发起了一个GET请求。这里http是一个'@angular/http'包中Http类型的。
+```javascript
+this.http    
+      .get("https://dinosaur-facts.firebaseio.com/dinosaurs.json")
+```
+get()函数返回一个observable。它能帮助我们返回处理异步到回调函数中。与promise不同的是，一个observable支持数据流。它不需要在数据返回的时候关闭。它可以多次的返回数据真到它真正需要被关闭。
+
+Observables支持多操作符或链式操作符。看看这段代码，map操作符从http响应中提取JSON。
+```javascript
+this.http     
+      .get("http://localhost:3000/dino")
+      .map((response) => response.json())
+```
+**注意**： 这是其中的一个导入操作符的方法
+```javascript
+import 'rxjs/add/operator/map'; // Preferred way to import
+```
+另外，我们可以使用下面原语句导入一整个rxjs库。
+```javascript
+import 'rxjs';
+```
+
+无论如何，它都返回一个observable。一个observable对象有一个subscribe函数，这个函数接收3个回调函数。
+
+* a) 成功回调函数，参数为输入的数据
+* b) 失败回调函数，参数为一个error对象
+* c) 完成回调函数，在observable完成的时候会被调用。
+
+看看如下示例
+```javascript
+this.http
+  .get("https://dinosaur-facts.firebaseio.com/dinosaurs.json")
+  .map((response) => response.json())
+  .subscribe(
+    (data) => console.log(data), // success
+    (error) => console.error(error), // failure
+    () => console.info("done") // done
+  );
+```
+你可以将observable结果设置给一个类/组件的变量，并且在模板中展示它。一个好的方法就是在模板中使用async管道。
+
+这是一个例子:
+```javascript
+dino: Observable<any>; // class level variable declaration
+ 
+ 
+// in the given function, where the API call run set returned observable to the // class variable
+     
+ this.dino = this.http // Set returned observable to a class variable
+      .get("https://dinosaur-facts.firebaseio.com/dinosaurs.json")
+      .map((response) => response.json());
+```
+在模板中使用async管道，当dino对象有值的时候，就使用对象里的值。
+
+```html
+<div>{{ (dino |async)?.bruhathkayosaurus.appeared }}</div>
+```
+
