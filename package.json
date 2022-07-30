@@ -3,10 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "hexo": {
-    "version": "3.3.1"
+    "version": "3.9.0"
   },
   "dependencies": {
-    "hexo": "^3.2.0",
+    "hexo": "^3.9.0",
     "hexo-asset-image": "0.0.3",
     "hexo-cli": "^1.0.4",
     "hexo-deployer-git": "^0.3.0",
@@ -21,6 +21,7 @@
     "hexo-server": "^0.2.0"
   },
   "scripts": {
-    "build": "hexo g"
+    "build": "hexo g",
+    "server": "hexo server"
   }
 }
